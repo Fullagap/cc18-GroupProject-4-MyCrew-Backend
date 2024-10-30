@@ -9,6 +9,184 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+// User model
+// Enum for status in Attendance and Leave Record
+enum Status {
+  APPROVE
+  WAITING
+  REJECT
+}
+
+enum adminRole {
+  ADMIN
+  USER
+}
+
+// User model
+model User {
+  id                Int       @id @default(autoincrement())
+  firstName         String    @map("first_name")
+  lastName          String    @map("last_name")
+  email             String    @unique
+  password         String
+  identityCardNumber String  
+  phoneNumber       String    @map("phone_number")
+  supId             Int?      @map("sup_id")
+  departmentId      Int       @map("department_id")
+  positionId        Int       @map("position_id")
+  role              adminRole @default(USER)
+  bookBank          String
+  salary            Decimal
+  profileImg        String?
+  dateStart         DateTime
+  dateEnd           DateTime?
+  annualLeaveAmount Float
+  sickLeaveAmount   Float
+  WOPayAmount       Float?      @default(365)
+
+  Attendances  Attendance[]
+  Payrolls     Payroll[]
+  RequestItems RequestItem[]
+  ActivityAttandances      ActivityAttandance[]
+
+  position    Position    @relation(fields: [positionId], references: [id])
+
+
+  department  Department?  @relation(fields: [departmentId], references: [id])
+  @@map("user")
+  
+  
+}
+
+// Attendance model
+model Attendance {
+  id           Int       @id @default(autoincrement())
+  userId       Int
+  date         DateTime
+  checkInTime  DateTime?
+  checkOutTime DateTime?
+  isWorkingDay Boolean
+  status       Status
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// Payroll model
+model Payroll {
+  id           Int        @id @default(autoincrement())
+  userId       Int        @map("user_id")
+  paidAmount   Decimal
+  paidDate     DateTime
+  salary       Decimal
+  compensation Decimal
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// Item model
+model Item {
+  id         Int      @id @default(autoincrement())
+  itemName   String   @map("item_name")
+  cost       Decimal  
+  categoryId Int      @map("category_id")
+
+  category    Category        @relation(fields: [categoryId], references: [id])
+  RequestItems RequestItem[]   
+}
+
+// RequestItem model
+model RequestItem {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+  itemId Int @map("item_id")
+
+  user User @relation(fields: [userId], references: [id])
+  item Item @relation(fields: [itemId], references: [id])
+}
+
+// Position model
+model Position {
+  id           Int    @id @default(autoincrement())
+  departmentId Int    @map("department_id")
+  positionName String @map("position_name")
+
+  department Department @relation(fields: [departmentId], references: [id])
+  Users      User[]
+}
+
+// Department model
+model Department {
+  id             Int    @id @default(autoincrement())
+  departmentName String @map("department_name")
+
+  Users     User[]
+  Positions Position[]
+}
+
+// Category model
+model Category {
+  id           Int    @id @default(autoincrement())
+  categoryName String @map("category_name")
+
+  Items Item[]
+}
+
+// Session model
+model Session {
+  id              Int      @id @default(autoincrement())
+  targetdate      DateTime
+  description     String?
+  eventType       String  @map("event_type") 
+  createdAt       DateTime  @default(now()) @map("created_at")
+  attendanceLimit Int @map("attandance_limit")
+  createUser      Int @map("create_user")
+
+  ActivityAttandances ActivityAttandance[]
+}
+
+// attAct model
+model ActivityAttandance {
+  id        Int @id @default(autoincrement())
+  sessionId Int   @map("session_id")
+  userId    Int   @map("user_id")
+
+  session Session @relation(fields: [sessionId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+}
+
+// Calendar model
+model Calendar {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  description String
+  eventType   String    @map("event_type")
+  createdAt   DateTime  @map("created_at")
+}
+
+// LeaveRecord model
+model LeaveRecord {
+  id          Int      @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  requestDate DateTime  @map("request_date")
+  startDate   DateTime  @map("start_date")
+  endDate     DateTime  @map("end_date")
+  leaveTypeId Int       @map("leave_type_id")
+  supId       Int       @map("sup_id")
+  status      Status
+
+  leaveCategory LeaveCategory @relation(fields: [leaveTypeId], references: [id])
+}
+
+// LeaveCategory model
+model LeaveCategory {
+  id        Int    @id @default(autoincrement())
+  leaveName String
+
+  LeaveRecords LeaveRecord[]
+}
+
+
