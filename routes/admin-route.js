@@ -1,7 +1,5 @@
 const express = require("express")
 const router = express.Router()
-module.exports = router
-module.exports = router
 const {register,updateUser,getUserById,getDepartment,getPositionEachDepartment,getEmployeeInDepartment,getEachSuperId} = require("../controllers/admin-controller")
 const {authCheck,adminCheck} = require("../middlewares/authen")
 

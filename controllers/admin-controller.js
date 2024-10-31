@@ -9,7 +9,7 @@ exports.register = async(req,res,next)=>{
   
     try {
 
-        const {firstName,lastName,email,identityCardNumber,phoneNumber,departmentId,positionId,bookBank,salary,dateStart,annualLeaveAmount,sickLeaveAmount,WOPayAmount,supId} = req.body
+        const {firstName,lastName,email,  identicalNumber ,phoneNumber,departmentId,positionId,bookBank,salary,dateStart,annualLeaveAmount,sickLeaveAmount,WOPayAmount,supId} = req.body
 
         
         const checkEmail = await prisma.user.findFirst({
@@ -19,12 +19,12 @@ exports.register = async(req,res,next)=>{
             return createError(400,'This user already exist')
         }
         const checkIdentityCardNumber = await prisma.user.findFirst({
-            where:{identityCardNumber:identityCardNumber}
+            where:{  identicalNumber :  identicalNumber }
         }) 
         if(checkIdentityCardNumber){
             return createError(400,'This user already exist')
         }
-        const password = identityCardNumber
+        const password =   identicalNumber 
 
         const hashPassword = await bcrypt.hash(password,10)
         
@@ -33,7 +33,7 @@ exports.register = async(req,res,next)=>{
             data:{
                 firstName,
                 lastName,
-                identityCardNumber,
+                identicalNumber ,
                 email,
                 phoneNumber,
                 password:hashPassword,
@@ -66,7 +66,7 @@ exports.register = async(req,res,next)=>{
             html: `
                 <p>Dear ${firstName},</p>
                 <p>Here is your email to login :${email}.</p>
-                <p>password:${identityCardNumber}.</p>
+                <p>password:${ identicalNumber }.</p>
                 <p>MyCrew Admin</p>
             `,
         };
@@ -98,6 +98,7 @@ exports.updateUser = async (req, res, next) => {
     try {
         const { id } = req.params;
         const updateData = {};
+        // console.log("userrrrrrrrr",req.body)
         
         if (req.body.email) updateData.email = req.body.email;
         if (req.body.phoneNumber) updateData.phoneNumber = req.body.phoneNumber;
@@ -108,7 +109,8 @@ exports.updateUser = async (req, res, next) => {
         if (req.body.annualLeaveAmount) updateData.annualLeaveAmount = req.body.annualLeaveAmount;
         if (req.body.sickLeaveAmount) updateData.sickLeaveAmount = req.body.sickLeaveAmount;
         if (req.body.WOPayAmount) updateData.WOPayAmount = req.body.WOPayAmount;
-        if (req.body.supId) updateData.supId = req.body.supId;
+        if (req.body.supId) updateData.supId =req.body.supId;
+        console.log("updateData",updateData)
 
 
         const updatedUser = await prisma.user.update({

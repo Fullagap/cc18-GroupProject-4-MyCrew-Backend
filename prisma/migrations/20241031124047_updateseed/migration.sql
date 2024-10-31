@@ -19,6 +19,8 @@ CREATE TABLE `user` (
     `annualLeaveAmount` DOUBLE NOT NULL,
     `sickLeaveAmount` INTEGER NOT NULL,
     `wo-pay-amount` INTEGER NULL DEFAULT 365,
+    `passwordResetToken` VARCHAR(191) NULL,
+    `passwordResetExpire` DATETIME(3) NULL,
 
     UNIQUE INDEX `user_email_key`(`email`),
     UNIQUE INDEX `user_indentical_number_key`(`indentical_number`),
@@ -26,13 +28,24 @@ CREATE TABLE `user` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Attendance` (
+CREATE TABLE `attendance` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
     `date` DATE NOT NULL,
     `checkInTime` DATETIME(3) NOT NULL,
     `checkOutTime` DATETIME(3) NULL,
     `isWorkingDay` BOOLEAN NOT NULL,
+    `checkInLocation` VARCHAR(191) NULL,
+    `checkOutLocation` VARCHAR(191) NULL,
+    `siteId` INTEGER NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `site` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `site_name` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -136,6 +149,8 @@ CREATE TABLE `LeaveRecord` (
     `leave_type_id` INTEGER NOT NULL,
     `sup_id` INTEGER NOT NULL,
     `status` ENUM('APPROVE', 'WAITING', 'REJECT') NOT NULL,
+    `description` VARCHAR(191) NULL,
+    `comment` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -155,7 +170,10 @@ ALTER TABLE `user` ADD CONSTRAINT `user_position_id_fkey` FOREIGN KEY (`position
 ALTER TABLE `user` ADD CONSTRAINT `user_department_id_fkey` FOREIGN KEY (`department_id`) REFERENCES `Department`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Attendance` ADD CONSTRAINT `Attendance_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `attendance` ADD CONSTRAINT `attendance_siteId_fkey` FOREIGN KEY (`siteId`) REFERENCES `site`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `attendance` ADD CONSTRAINT `attendance_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Payroll` ADD CONSTRAINT `Payroll_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
