@@ -27,35 +27,36 @@ enum adminRole {
 
 // User model
 model User {
-  id                Int       @id @default(autoincrement())
-  firstName         String    @map("first_name")
-  lastName          String    @map("last_name")
-  email             String    @unique
-  password         String
-  identityCardNumber String  
-  phoneNumber       String    @map("phone_number")
-  supId             Int?      @map("sup_id")
-  departmentId      Int       @map("department_id")
-  positionId        Int       @map("position_id")
-  role              adminRole @default(USER)
-  bookBank          String
-  salary            Decimal
-  profileImg        String?
-  dateStart         DateTime
-  dateEnd           DateTime?
-  annualLeaveAmount Float
-  sickLeaveAmount   Float
-  WOPayAmount       Float?      @default(365)
+  id                 Int       @id @default(autoincrement())
+  firstName          String    @map("first_name")
+  lastName           String    @map("last_name")
+  email              String    @unique
+  password           String
+  identityCardNumber String
+  phoneNumber        String    @map("phone_number")
+  supId              Int?      @map("sup_id")
+  departmentId       Int       @map("department_id")
+  positionId         Int       @map("position_id")
+  role               adminRole @default(USER)
+  bookBank           String
+  salary             Decimal
+  profileImg         String?
+  dateStart          DateTime
+  dateEnd            DateTime?
+  annualLeaveAmount  Float
+  sickLeaveAmount    Float
+  WOPayAmount        Float?    @default(365)
 
-  Attendances  Attendance[]
-  Payrolls     Payroll[]
-  RequestItems RequestItem[]
-  ActivityAttandances      ActivityAttandance[]
+  Attendances         Attendance[]
+  Payrolls            Payroll[]
+  RequestItems        RequestItem[]
+  ActivityAttandances ActivityAttandance[]
 
-  position    Position    @relation(fields: [positionId], references: [id])
+  position Position @relation(fields: [positionId], references: [id])
 
+  department Department? @relation(fields: [departmentId], references: [id])
+  Session    Session[]
 
-  department  Department?  @relation(fields: [departmentId], references: [id])
   @@map("user")
 }
 
@@ -71,7 +72,7 @@ model Attendance {
   checkOutLocation String?
   siteId           Int?
   // status       Status?
-  site             Site?      @relation(fields: [siteId], references: [id])
+  site             Site?     @relation(fields: [siteId], references: [id])
   user             User      @relation(fields: [userId], references: [id])
 
   @@map("attendance")
@@ -99,13 +100,13 @@ model Payroll {
 
 // Item model
 model Item {
-  id         Int      @id @default(autoincrement())
-  itemName   String   @map("item_name")
-  cost       Decimal  
-  categoryId Int      @map("category_id")
+  id         Int     @id @default(autoincrement())
+  itemName   String  @map("item_name")
+  cost       Decimal
+  categoryId Int     @map("category_id")
 
-  category    Category        @relation(fields: [categoryId], references: [id])
-  RequestItems RequestItem[]   
+  category     Category      @relation(fields: [categoryId], references: [id])
+  RequestItems RequestItem[]
 }
 
 // RequestItem model
@@ -147,7 +148,6 @@ model Category {
 
 // Session model
 model Session {
-<<<<<<< HEAD
   id                  Int                  @id @default(autoincrement())
   targetDate          DateTime
   description         String?
@@ -156,16 +156,6 @@ model Session {
   attendanceLimit     Int                  @map("attandance_limit")
   createUserId        Int                  @map("create_user_id")
   user                User                 @relation(fields: [createUserId], references: [id])
-=======
-  id              Int      @id @default(autoincrement())
-  targetdate      DateTime
-  description     String?
-  eventType       String   @map("event_type")
-  createdAt       DateTime @default(now()) @map("created_at")
-  attendanceLimit Int      @map("attandance_limit")
-  createUser      Int      @map("create_user")
-
->>>>>>> dev
   ActivityAttandances ActivityAttandance[]
 }
 
@@ -203,12 +193,12 @@ model Calendar {
 // LeaveRecord model
 model LeaveRecord {
   id          Int      @id @default(autoincrement())
-  userId      Int       @map("user_id")
-  requestDate DateTime  @map("request_date")
-  startDate   DateTime  @map("start_date")
-  endDate     DateTime  @map("end_date")
-  leaveTypeId Int       @map("leave_type_id")
-  supId       Int       @map("sup_id")
+  userId      Int      @map("user_id")
+  requestDate DateTime @map("request_date")
+  startDate   DateTime @map("start_date")
+  endDate     DateTime @map("end_date")
+  leaveTypeId Int      @map("leave_type_id")
+  supId       Int      @map("sup_id")
   status      Status
   description String?
   comment     String?
