@@ -21,9 +21,5 @@ readdirSync("./routes").map((file) => {
 app.use(hdlError)
 app.use("*",hdlNotFound)
 
-
-
-
-
-const port = process.env.PORT || 9000
+const port = process.env.PORT || 8890
 app.listen(port,()=>console.log("Server is running on",port))
