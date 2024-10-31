@@ -75,7 +75,7 @@ model Attendance {
   checkOutLocation String?
   siteId           Int?
   // status       Status?
-  site             Site?      @relation(fields: [siteId], references: [id])
+  site             Site?     @relation(fields: [siteId], references: [id])
   user             User      @relation(fields: [userId], references: [id])
 
   @@map("attendance")
