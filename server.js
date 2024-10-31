@@ -19,6 +19,7 @@ readdirSync("./routes").map((file) => {
   });
 
 app.use(hdlError)
+
 app.use("*",hdlNotFound)
 
 const port = process.env.PORT || 8890
