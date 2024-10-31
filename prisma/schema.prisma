@@ -13,7 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User model
 // Enum for status in Attendance and Leave Record
 enum Status {
   APPROVE
@@ -28,6 +27,29 @@ enum adminRole {
 
 // User model
 model User {
+<<<<<<< HEAD
+  id                  Int       @id @default(autoincrement())
+  firstName           String    @map("first_name")
+  lastName            String    @map("last_name")
+  email               String    @unique
+  password            String
+  identicalNumber     String    @unique @map("indentical_number")
+  phoneNumber         String    @map("phone_number")
+  supId               Int?      @map("sup_id")
+  departmentId        Int       @map("department_id")
+  positionId          Int       @map("position_id")
+  role                adminRole @default(USER)
+  bookBank            String
+  salary              Decimal
+  profileImg          String?
+  dateStart           DateTime  @default(now())
+  dateEnd             DateTime? @db.Date()
+  annualLeaveAmount   Float
+  sickLeaveAmount     Int
+  WOPayAmount         Int?      @default(365) @map("wo-pay-amount")
+  passwordResetToken  String?
+  passwordResetExpire DateTime?
+=======
   id                   Int       @id @default(autoincrement())
   firstName            String    @map("first_name")
   lastName             String    @map("last_name")
@@ -49,30 +71,53 @@ model User {
   WOPayAmount          Float?    @default(365)
   passwordResetToken   String?    //เพิ่ม resetPass
   passwordResetExpires DateTime?  //เพิ่ม
+>>>>>>> dev
 
   Attendances         Attendance[]
   Payrolls            Payroll[]
   RequestItems        RequestItem[]
   ActivityAttandances ActivityAttandance[]
+<<<<<<< HEAD
+  LeaveRecords        LeaveRecord[]
+
+  position   Position    @relation(fields: [positionId], references: [id])
+  Department Department? @relation(fields: [departmentId], references: [id])
+
+  Sessions Session[]
+=======
 
   position Position @relation(fields: [positionId], references: [id])
 
   department Department? @relation(fields: [departmentId], references: [id])
+>>>>>>> dev
 
   @@map("user")
 }
 
 // Attendance model
 model Attendance {
-  id           Int       @id @default(autoincrement())
-  userId       Int
-  date         DateTime
-  checkInTime  DateTime?
-  checkOutTime DateTime?
-  isWorkingDay Boolean
-  status       Status
+  id               Int       @id @default(autoincrement())
+  userId           Int
+  date             DateTime  @db.Date()
+  checkInTime      DateTime
+  checkOutTime     DateTime?
+  isWorkingDay     Boolean
+  checkInLocation  String?
+  checkOutLocation String?
+  siteId           Int?
+  // status       Status?
+  site             Site?      @relation(fields: [siteId], references: [id])
+  user             User      @relation(fields: [userId], references: [id])
 
-  user User @relation(fields: [userId], references: [id])
+  @@map("attendance")
+}
+
+model Site {
+  id          Int          @id @default(autoincrement())
+  siteName    String       @map("site_name")
+  Attendances Attendance[]
+
+  @@map("site")
 }
 
 // Payroll model
@@ -137,6 +182,16 @@ model Category {
 
 // Session model
 model Session {
+<<<<<<< HEAD
+  id                  Int                  @id @default(autoincrement())
+  targetDate          DateTime
+  description         String?
+  eventType           String               @map("event_type")
+  createdAt           DateTime             @default(now()) @map("created_at")
+  attendanceLimit     Int                  @map("attandance_limit")
+  createUserId        Int                  @map("create_user_id")
+  user                User                 @relation(fields: [createUserId], references: [id])
+=======
   id              Int      @id @default(autoincrement())
   targetdate      DateTime
   description     String?
@@ -145,6 +200,7 @@ model Session {
   attendanceLimit Int      @map("attandance_limit")
   createUser      Int      @map("create_user")
 
+>>>>>>> dev
   ActivityAttandances ActivityAttandance[]
 }
 
@@ -169,6 +225,15 @@ model Calendar {
 
 // LeaveRecord model
 model LeaveRecord {
+<<<<<<< HEAD
+  id          Int       @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  requestDate DateTime? @default(now()) @map("request_date")
+  startDate   DateTime  @map("start_date") @db.Date()
+  endDate     DateTime  @map("end_date") @db.Date()
+  leaveTypeId Int       @map("leave_type_id")
+  supId       Int       @map("sup_id")
+=======
   id          Int      @id @default(autoincrement())
   userId      Int      @map("user_id")
   requestDate DateTime @map("request_date")
@@ -176,9 +241,13 @@ model LeaveRecord {
   endDate     DateTime @map("end_date")
   leaveTypeId Int      @map("leave_type_id")
   supId       Int      @map("sup_id")
+>>>>>>> dev
   status      Status
+  description String?
+  comment     String?
 
   leaveCategory LeaveCategory @relation(fields: [leaveTypeId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
 }
 
 // LeaveCategory model
