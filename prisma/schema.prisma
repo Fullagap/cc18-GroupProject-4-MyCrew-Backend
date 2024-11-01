@@ -32,6 +32,7 @@ model User {
   lastName            String    @map("last_name")
   email               String    @unique
   password            String
+  address             String?
   identicalNumber     String    @unique @map("indentical_number")
   phoneNumber         String    @unique @map("phone_number")
   supId               Int?      @map("sup_id")

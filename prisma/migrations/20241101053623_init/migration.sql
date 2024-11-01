@@ -24,6 +24,7 @@ CREATE TABLE `user` (
 
     UNIQUE INDEX `user_email_key`(`email`),
     UNIQUE INDEX `user_indentical_number_key`(`indentical_number`),
+    UNIQUE INDEX `user_phone_number_key`(`phone_number`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

@@ -28,7 +28,6 @@ exports.register = async(req,res,next)=>{
 
         const hashPassword = await bcrypt.hash(password,10)
         
-        //alert mock departmentId and positionId in your database
         const newUser = await prisma.user.create({
             data:{
                 firstName,
@@ -37,14 +36,14 @@ exports.register = async(req,res,next)=>{
                 email,
                 phoneNumber,
                 password:hashPassword,
-                departmentId,
-                positionId,
+                departmentId:+departmentId ,
+                positionId: +positionId,
                 bookBank,
                 salary,
-                dateStart,
-                annualLeaveAmount,
-                sickLeaveAmount,
-                WOPayAmount,
+                dateStart: new Date(dateStart),
+                annualLeaveAmount: +annualLeaveAmount,
+                sickLeaveAmount: +sickLeaveAmount,
+                WOPayAmount: +WOPayAmount,
                 supId: +supId
             }
         })
@@ -182,6 +181,7 @@ exports.getPositionEachDepartment = async(req,res,next)=>{
     try {
 
         const {id} = req.params
+        console.log(id)
         const position = await prisma.position.findMany({
           where:{departmentId: +id}
         })
@@ -205,7 +205,8 @@ exports.getEmployeeInDepartment = async(req,res,next)=>{
                         firstName: true,
                         lastName: true,
                         email: true,
-                        identityCardNumber: true,
+                        identicalNumber: true,
+                        address: true,
                         position:{
                             select:{
                                 positionName: true
@@ -216,7 +217,8 @@ exports.getEmployeeInDepartment = async(req,res,next)=>{
                 }
             }
         })
-        res.json(employees)
+
+        res.json(employees[0]?.Users || [])
     } catch (err) {
         next(err)
     }
@@ -257,37 +259,59 @@ exports.getLeaderEachSupId = async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        // Find the leader by their `id`
-        const leader = await prisma.user.findFirst({
-            where: {
-                id: +id,  // Assuming `id` is the leader's unique identifier
-                // supId: null, // Indicates they are a top-level leader with no supervisor
-            },
-            include: {
-                position: {
-                    select: {
-                        positionName: true,
+        // Step 1: Check if the provided `supId` is 1 and find the top-level leader with `supId: null`
+        let leader;
+        if (+id === 1) {
+            leader = await prisma.user.findFirst({
+                where: {
+                    supId: null, // Find the top leader
+                },
+                include: {
+                    position: {
+                        select: {
+                            positionName: true,
+                        },
+                    },
+                    Department: {
+                        select: {
+                            departmentName: true,
+                        },
                     },
                 },
-                Department: {
-                    select: {
-                        departmentName: true,
+            });
+        } else {
+            //if subId is not 1, directly find the leader with that `supId`
+            leader = await prisma.user.findFirst({
+                where: {
+                    id: +id,
+                },
+                include: {
+                    position: {
+                        select: {
+                            positionName: true,
+                        },
+                    },
+                    Department: {
+                        select: {
+                            departmentName: true,
+                        },
                     },
                 },
-            },
-        });
-
-        if (!leader) {
-            return next(createError(400, "Leader with the specified ID not found or is not a top-level leader"));
+            });
         }
 
-        // Now, use the leader's `id` as `supId` to get their subordinates
+        // Handle case where no leader is found
+        if (!leader) {
+            return next(createError(400, "Leader not found"));
+        }
+
+        // Step 3: Find subordinates using the leader's `id` as `supId`
         const subordinates = await prisma.user.findMany({
             where: {
-                supId: leader.id, // Users with this leader as their `supId`
+                supId: leader.id,
             },
             orderBy: {
-                dateStart: 'asc', // Sort by date of joining, if needed
+                dateStart: 'asc',
             },
             select: {
                 id: true,
@@ -307,11 +331,13 @@ exports.getLeaderEachSupId = async (req, res, next) => {
             },
         });
 
+        // Step 4: Return the leader and their subordinates
         res.json({
             leader: {
                 id: leader.id,
                 firstName: leader.firstName,
                 lastName: leader.lastName,
+                superId: leader.supId,
                 position: leader.position.positionName,
                 department: leader.Department?.departmentName,
             },
@@ -321,6 +347,7 @@ exports.getLeaderEachSupId = async (req, res, next) => {
         next(err);
     }
 };
+
 
 
 exports.getSupIdByDepartment = async (req, res, next) => {
