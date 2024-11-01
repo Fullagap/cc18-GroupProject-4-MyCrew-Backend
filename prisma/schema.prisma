@@ -33,7 +33,7 @@ model User {
   email               String    @unique
   password            String
   identicalNumber     String    @unique @map("indentical_number")
-  phoneNumber         String    @map("phone_number")
+  phoneNumber         String    @unique @map("phone_number")
   supId               Int?      @map("sup_id")
   departmentId        Int       @map("department_id")
   positionId          Int       @map("position_id")
@@ -75,7 +75,7 @@ model Attendance {
   checkOutLocation String?
   siteId           Int?
   // status       Status?
-  site             Site?     @relation(fields: [siteId], references: [id])
+  site             Site?      @relation(fields: [siteId], references: [id])
   user             User      @relation(fields: [userId], references: [id])
 
   @@map("attendance")
