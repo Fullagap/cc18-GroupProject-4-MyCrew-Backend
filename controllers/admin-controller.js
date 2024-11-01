@@ -148,7 +148,7 @@ exports.getUserById = async(req,res,next)=>{
                 position:{
                     select: {positionName: true}
                 },
-                department:{
+                Department:{
                     select: {departmentName: true}
                 }
             }
@@ -236,7 +236,7 @@ exports.getEachSuperId = async (req, res, next) => {
 
                 }
                },
-               department:{
+               Department:{
                 select:{
                     departmentName: true
                 }
@@ -253,15 +253,115 @@ exports.getEachSuperId = async (req, res, next) => {
     }
 };
 
-exports.getLeaderEachSupId = async(req,res,next)=>{
+exports.getLeaderEachSupId = async (req, res, next) => {
     try {
-        const {id}=req.params
+        const { id } = req.params;
+
+        // Find the leader by their `id`
         const leader = await prisma.user.findFirst({
-            where:{
-                supId: +id,       
-            }
-        })
+            where: {
+                id: +id,  // Assuming `id` is the leader's unique identifier
+                // supId: null, // Indicates they are a top-level leader with no supervisor
+            },
+            include: {
+                position: {
+                    select: {
+                        positionName: true,
+                    },
+                },
+                Department: {
+                    select: {
+                        departmentName: true,
+                    },
+                },
+            },
+        });
+
+        if (!leader) {
+            return next(createError(400, "Leader with the specified ID not found or is not a top-level leader"));
+        }
+
+        // Now, use the leader's `id` as `supId` to get their subordinates
+        const subordinates = await prisma.user.findMany({
+            where: {
+                supId: leader.id, // Users with this leader as their `supId`
+            },
+            orderBy: {
+                dateStart: 'asc', // Sort by date of joining, if needed
+            },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                position: {
+                    select: {
+                        positionName: true,
+                    },
+                },
+                Department: {
+                    select: {
+                        departmentName: true,
+                    },
+                },
+            },
+        });
+
+        res.json({
+            leader: {
+                id: leader.id,
+                firstName: leader.firstName,
+                lastName: leader.lastName,
+                position: leader.position.positionName,
+                department: leader.Department?.departmentName,
+            },
+            subordinates,
+        });
     } catch (err) {
-        next(err)
+        next(err);
     }
-}
+};
+
+
+exports.getSupIdByDepartment = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const department = await prisma.department.findUnique({
+            where: {
+                id: +id,
+            },
+            select: {
+                id: true,
+                departmentName: true,
+                Users: {
+                    select: {
+                        supId: true,
+                    },
+                    distinct: ['supId'],
+                    where: {
+                        supId: {
+                            not: null, // Exclude null supId values if needed
+                        },
+                    },
+                },
+            },
+        });
+
+        if (!department) {
+            return res.status(404).json({ message: "Department not found" });
+        }
+
+        // Format the result to show unique supId for the department
+        const result = {
+            departmentId: department.id,
+            departmentName: department.departmentName,
+            supIds: department.Users.map(user => user.supId),
+        };
+
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+};
+

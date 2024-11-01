@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const {register,updateUser,getUserById,getDepartment,getPositionEachDepartment,getEmployeeInDepartment,getEachSuperId} = require("../controllers/admin-controller")
+const {register,updateUser,getUserById,getDepartment,getPositionEachDepartment,getEmployeeInDepartment,getEachSuperId,getLeaderEachSupId,getSupIdByDepartment}= require("../controllers/admin-controller")
 const {authCheck,adminCheck} = require("../middlewares/authen")
 
 router.post("/admin/register",register)
@@ -10,5 +10,7 @@ router.get("/admin/department",authCheck,adminCheck,getDepartment)
 router.get("/admin/department-position/:id",authCheck,adminCheck,getPositionEachDepartment)
 router.get("/admin/department-employees/:id",authCheck,adminCheck,getEmployeeInDepartment)
 router.get("/admin/superId-employees/:id",authCheck,adminCheck,getEachSuperId)
+router.get("/admin/leader-superId/:id",authCheck,adminCheck,getLeaderEachSupId)
+router.get("/admin/superId-department/:id",authCheck,adminCheck,getSupIdByDepartment)
 
 module.exports = router
