@@ -19,22 +19,23 @@ calendarController.getLeaveRecord = async (req,res,next)=>{
     }
 }
 
-calendarController.getLeaveHistory = async (req,res,next)=>{
+calendarController.getLeaveRecordById = async (req,res,next)=>{
     try{
         const { userId } = req.params;
-        const data = await calendarService.getLeaveHistory(userId)
+        const data = await calendarService.getLeaveRecordById(userId)
         res.json({ message: "Success", data })
     }catch{
         next()
     }
 }     
 
-calendarController.getMemosByDate = async (req,res,next)=>{
+calendarController.getSessionById = async (req,res,next)=>{
     try{
-        const userId = req.user.id // ต้องลอง Log ดูอีกที
-        const {date} = req.params
-        const data = await calendarService.getMemosByDate(userId,date)
-        res.json({ message: "Success", data })
+        // const createUserId = req.user.id // ต้องรอ Login
+        const {createUserId} = req.params
+        console.log('req.params getSessionById', req.params)
+        const data = await calendarService.getSessionById(createUserId)
+        res.json({ message: "Success getSessionById", data })
     }catch{
         next()
     }
@@ -42,9 +43,27 @@ calendarController.getMemosByDate = async (req,res,next)=>{
 
 calendarController.addMemo = async (req,res,next)=>{
     try{
-        const userId = req.user.id // ต้องลอง Log ดูอีกที
-        const { date, content } = req.body
-        await calendarService.addMemo(userId,date,content)
+        // const createUserId = req.user.id // ต้องลอง Log ดูอีกที
+        const eventType = "MEMO"
+        const attendanceLimit = 0
+        const {createUserId} = req.params
+        const { targetDate, description } = req.body
+        console.log('req.params', req.params)
+        console.log('req.body', req.body)
+        await calendarService.addMemo(createUserId,attendanceLimit,eventType,targetDate,description)
+        res.json({ message: "Success" })
+    }catch{
+        next()
+    }
+}
+
+calendarController.updateMemo = async (req,res,next)=>{
+    try{
+        const createUserId = req.user.id // ต้องลอง Log ดูอีกที
+        const eventType = "MEMO"
+        const {sessionId} = req.params
+        const { targetDate, description } = req.body
+        await calendarService.updateMemo(createUserId,eventType,sessionId,targetDate,description)
         res.json({ message: "Success" })
     }catch{
         next()
@@ -53,8 +72,8 @@ calendarController.addMemo = async (req,res,next)=>{
 
 calendarController.deleteMemo = async (req,res,next)=>{
     try{
-        const { memoId } = req.params
-        await calendarService.deleteMemo(memoId)
+        const { sessionId } = req.params
+        await calendarService.deleteMemo(sessionId)
         res.json({ message: "Delete Memo Success"})
     }catch{
         next()

@@ -15,7 +15,7 @@ app.use(cors())
 
 
 readdirSync("./routes").map((file) => {
-    app.use("/", require(`./routes/${file}`));
+  return app.use("/", require(`./routes/${file}`));
   });
 
 app.use(hdlError)
