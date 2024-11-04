@@ -9,7 +9,7 @@ exports.register = async(req,res,next)=>{
   
     try {
 
-        const {firstName,lastName,email,  identicalNumber ,phoneNumber,departmentId,positionId,bookBank,salary,dateStart,annualLeaveAmount,sickLeaveAmount,WOPayAmount,supId} = req.body
+        const {firstName,lastName,email,identityCardNumber,phoneNumber,departmentId,positionId,bookBank,salary,dateStart,annualLeaveAmount,sickLeaveAmount,WOPayAmount,supId} = req.body
 
         
         const checkEmail = await prisma.user.findFirst({
@@ -19,12 +19,12 @@ exports.register = async(req,res,next)=>{
             return createError(400,'This user already exist')
         }
         const checkIdentityCardNumber = await prisma.user.findFirst({
-            where:{  identicalNumber :  identicalNumber }
+            where:{identityCardNumber:identityCardNumber}
         }) 
-        if(checkIdentityCardNumber){
+        if(checkidenticalNumber){
             return createError(400,'This user already exist')
         }
-        const password =   identicalNumber 
+        const password = identityCardNumber
 
         const hashPassword = await bcrypt.hash(password,10)
         
@@ -32,7 +32,7 @@ exports.register = async(req,res,next)=>{
             data:{
                 firstName,
                 lastName,
-                identicalNumber ,
+                identityCardNumber,
                 email,
                 phoneNumber,
                 password:hashPassword,
@@ -65,7 +65,7 @@ exports.register = async(req,res,next)=>{
             html: `
                 <p>Dear ${firstName},</p>
                 <p>Here is your email to login :${email}.</p>
-                <p>password:${ identicalNumber }.</p>
+                <p>password:${identityCardNumber}.</p>
                 <p>MyCrew Admin</p>
             `,
         };
@@ -255,8 +255,7 @@ exports.getEmployeeInDepartment = async(req,res,next)=>{
                         firstName: true,
                         lastName: true,
                         email: true,
-                        identicalNumber: true,
-                        address: true,
+                        identityCardNumber: true,
                         position:{
                             select:{
                                 positionName: true
@@ -297,7 +296,7 @@ exports.getEachSuperId = async (req, res, next) => {
             }
         });
 
-        const employeeEachSuperId = superId.map(({ password, identityCardNumber, dateStart, dateEnd,profileImg, ...userData }) => userData);
+        const employeeEachSuperId = superId.map(({ password, identicalNumber, dateStart, dateEnd,profileImg, ...userData }) => userData);
 
         res.json(employeeEachSuperId);
     } catch (err) {
