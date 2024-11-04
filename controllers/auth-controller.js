@@ -68,7 +68,7 @@ exports.requestChangePassword = async (req, res, next) => {
             where: { email },
             data: {
                 passwordResetToken: token,
-                passwordResetExpires: new Date(Date.now() + 3600000) // 1 hour from now
+                passwordResetExpire: new Date(Date.now() + 3600000) // 1 hour from now
             },
         });
 
@@ -88,7 +88,7 @@ exports.requestChangePassword = async (req, res, next) => {
             html: `
                 <p>Hi,</p>
                 <p>You requested a password change. Click the link below to reset your password:</p>
-                <p><a href="http://localhost:5173/auth/change-password/${token}">Reset Password</a></p>
+                <p><a href="http://localhost:5173/change-password/${token}">Reset Password</a></p>
                 <p>This link will expire in one hour.</p>
             `, 
         };
@@ -107,7 +107,7 @@ exports.changePassword = async (req, res, next) => {
     try {
         
         const user = await prisma.user.findFirst({
-            where: { passwordResetToken: token }
+            where: { passwordResetToken: token, passwordResetExpire: { gte: new Date() } }
         });
 
         if (!user) {
@@ -123,7 +123,7 @@ exports.changePassword = async (req, res, next) => {
             data: {
                 password: hashedPassword,
                 passwordResetToken: null,
-                passwordResetExpires: null,
+                passwordResetExpire: null,
             },
         });
 
