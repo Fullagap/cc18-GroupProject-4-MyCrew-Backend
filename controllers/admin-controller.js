@@ -9,7 +9,7 @@ exports.register = async(req,res,next)=>{
   
     try {
 
-        const {firstName,lastName,email,identityCardNumber,phoneNumber,departmentId,positionId,bookBank,salary,dateStart,annualLeaveAmount,sickLeaveAmount,WOPayAmount,supId} = req.body
+        const {firstName,lastName,email,identicalNumber,phoneNumber,departmentId,positionId,bookBank,salary,dateStart,annualLeaveAmount,sickLeaveAmount,WOPayAmount,supId} = req.body
 
         
         const checkEmail = await prisma.user.findFirst({
@@ -19,12 +19,12 @@ exports.register = async(req,res,next)=>{
             return createError(400,'This user already exist')
         }
         const checkIdentityCardNumber = await prisma.user.findFirst({
-            where:{identityCardNumber:identityCardNumber}
+            where:{identicalNumber:identicalNumber}
         }) 
-        if(checkidenticalNumber){
+        if(checkIdentityCardNumber){
             return createError(400,'This user already exist')
         }
-        const password = identityCardNumber
+        const password = identicalNumber
 
         const hashPassword = await bcrypt.hash(password,10)
         
@@ -32,7 +32,7 @@ exports.register = async(req,res,next)=>{
             data:{
                 firstName,
                 lastName,
-                identityCardNumber,
+                identicalNumber,
                 email,
                 phoneNumber,
                 password:hashPassword,
@@ -255,7 +255,7 @@ exports.getEmployeeInDepartment = async(req,res,next)=>{
                         firstName: true,
                         lastName: true,
                         email: true,
-                        identityCardNumber: true,
+                        identicalNumber: true,
                         position:{
                             select:{
                                 positionName: true
