@@ -442,3 +442,74 @@ exports.getSupIdByDepartment = async (req, res, next) => {
     }
 };
 
+exports.createDepartment = async(req,res,next)=>{
+
+    try {
+        
+        const {departmentName} = req.body
+
+        const department = await prisma.department.findFirst({
+            where:{
+                departmentName:departmentName
+            }
+        })
+
+        if(department){
+            return createError(400,"This department already exist")
+        }
+
+        await prisma.department.create({
+               
+               data:{departmentName:departmentName}
+        })
+        res.json('Create successfully')
+    } catch (err) {
+        next(err)
+    }
+
+}
+
+exports.createPosition = async(req,res,next)=>{
+    try {
+        const {departmentId,positionName} = req.body
+
+        const position =await prisma.position.create({
+               
+               data:{
+                departmentId:+departmentId,
+                positionName:positionName
+            }
+        })
+        res.json('Create successfully')
+    } catch (err) {
+        next(err)
+    }
+}
+
+exports.getHeader = async(req,res,next)=>{
+    try {
+        const leader = await prisma.user.findFirst({
+            where:{supId:null},
+            select:{
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                position: {
+                    select: {
+                        positionName: true,
+                    },
+                },
+                Department: {
+                    select: {
+                        departmentName: true,
+                    },
+                },
+            }
+        })
+        res.json(leader)
+    } catch (err) {
+        next(err)
+    }
+}
+
