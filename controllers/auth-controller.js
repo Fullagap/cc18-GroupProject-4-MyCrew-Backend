@@ -134,6 +134,41 @@ exports.changePassword = async (req, res, next) => {
     }
 };
 
+exports.resetPassword = async (req, res, next) => {
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id; // Assuming req.user contains user info from middleware after JWT verification
+
+    try {
+        // Fetch the user from the database
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+
+        if (!user) {
+            return createError(404, "User not found");
+        }
+
+        // Check if the old password is correct
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Old password is incorrect" });
+        }
+
+        // Hash the new password
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update the user's password in the database
+        await prisma.user.update({
+            where: { id: userId },
+            data: {
+                password: hashedNewPassword,
+            },
+        });
+
+        res.json({ msg: "Password changed successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
 
 
 
