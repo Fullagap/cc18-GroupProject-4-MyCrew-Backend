@@ -10,9 +10,14 @@ const userData = [
     lastName: "dummyLastName",
     email: "dummy@codecamp.com",
     password: hashedPassword,
+<<<<<<< HEAD
+    identicalNumber: "1111111111111",
+    phoneNumber: "023456789",
+=======
     address : "Centerpoint",
     identicalNumber: "1111111111111",
     phoneNumber: "111111111",
+>>>>>>> dev
     departmentId: 1,
     positionId: 1,
     role: "ADMIN",
@@ -27,9 +32,14 @@ const userData = [
     lastName: "Konjeng",
     email: "Faris@codecamp.com",
     password: hashedPassword,
+<<<<<<< HEAD
+    identicalNumber: "2111111111111",
+    phoneNumber: "023456789",
+=======
     address : "Centerpoint",
     identicalNumber: "2111111111111",
     phoneNumber: "222222222",
+>>>>>>> dev
     supId: 1,
     departmentId: 1,
     positionId: 1,
@@ -39,6 +49,8 @@ const userData = [
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
   },
+<<<<<<< HEAD
+=======
   {
     id: 3,
     firstName: "mark",
@@ -129,6 +141,7 @@ const userData = [
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
   },
+>>>>>>> dev
 ];
 
 const departmentData = [
@@ -138,8 +151,12 @@ const departmentData = [
 const positionData = [
   { id: 1, departmentId: 1, positionName: "Electircal Engineer" },
   { id: 2, departmentId: 1, positionName: "Mechanical Engineer" },
+<<<<<<< HEAD
+  { id: 3, departmentId: 2, positionName: "Clerk" },
+=======
   { id: 3, departmentId: 2, positionName: "Clerk A" },
   { id: 4, departmentId: 2, positionName: "Clerk B" },
+>>>>>>> dev
 ];
 const leaveCategoryData = [
   { id: 1, leaveName: "annualLeave" },
@@ -216,12 +233,15 @@ const activityAttandanceData = [
     {id : 1, sessionId : 1, userId:1},
     {id : 2, sessionId : 1, userId : 2}
 ]
+<<<<<<< HEAD
+=======
 const siteData = [
   {id : 1, siteName : "Central"},
   {id : 2, siteName : "Paragon"}
   
 ]
 
+>>>>>>> dev
 
 console.log("DB seed.....");
 
