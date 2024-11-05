@@ -547,23 +547,28 @@ exports.getLeadSupId = async(req,res,next)=>{
     }
 }
 
-exports.updateImageProfile = async(req,res,next)=>{
+exports.updateImageProfile = async (req, res, next) => {
     try {
-        const {id} =req.params
-        const upload = await cloudinary.uploader.upload(req.file.path)
-        const photo = upload.url
-        const updateProfile = await prisma.user.findFirst({
-            where:{
-                id:+id
-            },
-            data:{
-                profileImg:photo
-            }
-        })
+        const { id } = req.params;
 
-        res.json("Update User profile successfully")
+        // Upload the image to Cloudinary
+        const upload = await cloudinary.uploader.upload(req.file.path);
+        const photo = upload.url;
+
+        // Update the user's profile image
+        const updateProfile = await prisma.user.update({
+            where: {
+                id: +id // Ensure the id is a number
+            },
+            data: {
+                profileImg: photo
+            }
+        });
+
+        res.json("Update User profile successfully");
     } catch (err) {
-       next(err) 
+        next(err);
     }
-}
+};
+
 
