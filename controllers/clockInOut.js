@@ -2,15 +2,16 @@
 const createError = require("../utils/createError");
 const prisma = require("../config/prisma");
 
+
 module.exports.clockIn = async (req, res, next) => {
   try {
-    const { latitude, longitude } = req.body;
+    const { latitude, longitude} = req.body;
 
     // Mock-up office location (for testing)
     const officeLocation = {
-      latitude: 13.7563, // Example: Wannasorn building
-      longitude: 100.5018,
-      radius: 100, // meters
+      latitude: 13.758, // Example: Wannasorn building
+      longitude: 100.535,
+      radius: 10000, // meters
     };
 
     // Calculate distance (simplified for testing)
@@ -22,7 +23,7 @@ module.exports.clockIn = async (req, res, next) => {
     );
 
     // Mock user data
-    const userId = 1; // Test user ID,actually we get it from token
+    const userId = 5; // Test user ID,actually we get it from token
     const currentDate = new Date();
 
     // Check if user standing in area or not
@@ -83,7 +84,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 module.exports.clockOut = async (req, res, next) => {
   try {
     const { latitude, longitude } = req.body;
-    const userId = 1; // Test user ID
+    const userId = 5; // Test user ID
     const currentDate = new Date();
 
     // Find today's attendance record

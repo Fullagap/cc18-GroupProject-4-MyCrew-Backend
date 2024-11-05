@@ -1,7 +1,8 @@
 const express = require("express")
 const router = express.Router()
 const { register, updateUser, getUserById, getDepartment, getPositionEachDepartment, getEmployeeInDepartment
-    , getEachSuperId, getLeaderEachSupId, getSupIdByDepartment, allEmployees, createDepartment, createPosition,getHeader } = require("../controllers/admin-controller")
+    , getEachSuperId, getLeaderEachSupId, getSupIdByDepartment, allEmployees, createDepartment, createPosition,getHeader
+,createOfficeSiteLocation } = require("../controllers/admin-controller")
 const { authCheck, adminCheck } = require("../middlewares/authen")
 
 router.post("/admin/register", register)
@@ -17,5 +18,6 @@ router.get("/admin/superId-department/:id", authCheck, adminCheck, getSupIdByDep
 router.post("/admin/create-department", createDepartment)
 router.post("/admin/create-position", createPosition)
 router.get("/admin/leader", getHeader)
+router.post('/admin/site-register',createOfficeSiteLocation)
 
 module.exports = router

@@ -512,3 +512,18 @@ exports.getHeader = async(req,res,next)=>{
     }
 }
 
+const createOfficeSiteLocation = (req,res,next) =>{
+    try{
+        const {form} = req.body
+        const createSiteLocationResult = prisma.site.createMany({
+            data:{
+                siteName:form.siteName,
+                latitude:form.latitude,
+                longitude:form.longitude,
+                area:form.area
+            }
+        })
+    }catch(err){
+        next(err)
+    }
+}
