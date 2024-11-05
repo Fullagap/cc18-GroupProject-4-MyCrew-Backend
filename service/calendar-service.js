@@ -1,55 +1,69 @@
 const prisma = require("../config/prisma");
 const calendarService = {};
 
-calendarService.getCalendar = async () => 
-  await prisma.calendar.findMany();
+calendarService.getCalendar = async () => await prisma.calendar.findMany();
 
-calendarService.getLeaveRecord = async () => 
+calendarService.getLeaveRecord = async () =>
   await prisma.leaveRecord.findMany();
 
-calendarService.getLeaveRecordById = async (userId) => 
-    await prisma.leaveRecord.findMany({
-        where: { userId: parseInt(userId) },
-        include: { leaveCategory: true }, // ดึงข้อมูล leaveCategory มาด้วย
-      });
-
-
-calendarService.getSessionById = async (createUserId) =>  /// หรือเอามาให้หมดเลย แล้วไปจัดการข้อมูลที่หน้าบ้านอีกที
-  await prisma.session.findMany({
-    where: { 
-      createUserId
-      },
+calendarService.getLeaveRecordById = async (userId) =>
+  await prisma.leaveRecord.findMany({
+    where: { userId: parseInt(userId) },
+    include: { leaveCategory: true }, // ดึงข้อมูล leaveCategory มาด้วย
   });
 
-calendarService.addMemo = async (createUserId,attendanceLimit,eventType,targetDate,description) => {
-  console.log('first', createUserId,attendanceLimit,eventType,targetDate,description)
-   return await prisma.session.create({
-        data: {
-          createUserId,
-          attendanceLimit,
-          eventType,
-          targetDate: new Date(targetDate),
-          description,
-        },
-      });
-    }
+calendarService.getSession = async () =>
+  await prisma.session.findMany();
 
-calendarService.updateMemo = async (createUserId,eventType,targetDate,description) => 
-    await prisma.session.update({
-        data: {
-          id: sessionId,
-          createUserId,
-          eventType,
-          targetDate: new Date(targetDate),
-          description,
-        },
-      });
+calendarService.addSession = async (
+  createUserId,
+  attendanceLimit,
+  eventType,
+  targetDate,
+  description
+) => {
+  console.log('prisma', createUserId,
+    attendanceLimit,
+    eventType,
+    targetDate,
+    description)
+  return await prisma.session.create({
+    data: {
+      createUserId: parseInt(createUserId),
+      attendanceLimit: parseInt(attendanceLimit),
+      eventType,
+      targetDate: new Date(targetDate),
+      description,
+    },
+  });
+};
 
-calendarService.deleteMemo = async (sessionId) => 
-    await prisma.session.delete({
-        where: {
-            id: sessionId
-        },
-      });
+calendarService.updateSession = async (
+  sessionId,       
+  createUserId,
+  eventType,
+  targetDate,
+  description,
+  attendanceLimit
+) =>
+  await prisma.session.update({
+    where: {
+      id: parseInt(sessionId)
+    },
+    data: {
+      createUserId: parseInt(createUserId),
+      eventType,
+      targetDate: new Date(targetDate),
+      description,
+      attendanceLimit: parseInt(attendanceLimit),
+    },
+  });
+
+calendarService.deleteSession = async (sessionId) =>
+  await prisma.session.delete({
+    where: {
+      id: parseInt(sessionId),
+    },
+  });
 
 module.exports = calendarService;
