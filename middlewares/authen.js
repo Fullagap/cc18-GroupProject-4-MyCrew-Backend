@@ -2,29 +2,43 @@ const jwt = require("jsonwebtoken")
 const createError = require("../utils/createError")
 const prisma = require("../config/prisma") 
 
-module.exports.authCheck  = async (req,res,next)=>{
+exports.authCheck = async (req,res,next) => {
     try {
-        const token = req.headers.authorization.split(" ")[1] ;
-        if(!token){
-            return createError(401,"Unauthorized")
+    
+      const authorization = req.headers.authorization
+        if(!authorization || !authorization.startsWith("Bearer") ){
+            createError(401,"Unauthorized1")
+        }
+        const token  =authorization.split(" ")[1]
+
+        if(!token) {
+            createError(401,"Unauthorized")
         }
 
-        const decoded = jwt.verify(token,process.env.SECRET_KEY)
+        const payload = jwt.verify(token, process.env.JWT_SECRET)
+        console.log("playyyyyyyyy",payload.user.id)
 
-        const user = await prisma.user.findUnique({
-            where: {
-                id: decoded.id
+        const foundUser = await prisma.user.findUnique({
+            where : {
+                id : payload.user.id
             }
         })
-        if(!user){
-            return createError(401,"Unauthorized")
+        console.log("USERRRR",foundUser)
+
+        if (!foundUser) {
+            createError(401,"Unauthorized")
         }
-        req.user = user
+        console.log(foundUser)
+
+        const {password ,identityCardNumber,dateStart , dateEnd, ...useData} = foundUser
+        req.user = useData
+        console.log("userrrrrr",req.user)
+
         next()
-    } catch (error) {
-        next(error)
-    }
-}
+  } catch (err) {
+      next(err)
+  }
+  }
 
 module.exports.adminCheck = async (req,res,next)=>{
     try {
@@ -34,7 +48,8 @@ module.exports.adminCheck = async (req,res,next)=>{
                 email
             }
         })
-        if(adminUser.role !== "admin"){
+        // console.log(adminUser)
+        if(adminUser.role !== "ADMIN"){
             return createError(401,"Unauthorized")
         }
         next()
