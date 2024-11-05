@@ -36,17 +36,21 @@ model User {
   identicalNumber     String    @unique @map("indentical_number")
   phoneNumber         String    @unique @map("phone_number")
   supId               Int?      @map("sup_id")
-  departmentId        Int       @map("department_id")
-  positionId          Int       @map("position_id")
+  departmentId        Int?      @map("department_id")
+  positionId          Int?      @map("position_id")
   role                adminRole @default(USER)
   bookBank            String
   salary              Decimal
   profileImg          String?
   dateStart           DateTime  @default(now())
   dateEnd             DateTime? @db.Date()
-  annualLeaveAmount   Float
-  sickLeaveAmount     Int
-  WOPayAmount         Int?      @default(365) @map("wo-pay-amount")
+  annualLeaveAmount   Float     @map("annual_leave_amount")
+  sickLeaveAmount     Int?      @default(30) @map("sick_leave_amount")
+  personalLeaveAmount Int?      @default(3) @map("personal_leave_amount")
+  annualLeave         Float     @map("annual_leave")
+  sickLeave           Int?      @default(30) @map("sick_leave")
+  personalLeave       Int?      @default(3) @map("personal_leave")
+
   passwordResetToken  String?
   passwordResetExpire DateTime?
 
@@ -56,7 +60,7 @@ model User {
   ActivityAttandances ActivityAttandance[]
   LeaveRecords        LeaveRecord[]
 
-  position   Position    @relation(fields: [positionId], references: [id])
+  position   Position?   @relation(fields: [positionId], references: [id])
   Department Department? @relation(fields: [departmentId], references: [id])
 
   Sessions Session[]
@@ -83,12 +87,12 @@ model Attendance {
 }
 
 model Site {
-  id          Int          @id @default(autoincrement())
-  siteName    String       @map("site_name")
-  latitude    String
-  longitude   String
-  area        Int //in meter
-  
+  id        Int    @id @default(autoincrement())
+  siteName  String @map("site_name")
+  latitude  Float
+  longitude Float
+  area      Int //in meter
+
   Attendances Attendance[]
 
   @@map("site")
@@ -122,6 +126,7 @@ model RequestItem {
   id     Int @id @default(autoincrement())
   userId Int @map("user_id")
   itemId Int @map("item_id")
+  status Status
 
   user User @relation(fields: [userId], references: [id])
   item Item @relation(fields: [itemId], references: [id])
