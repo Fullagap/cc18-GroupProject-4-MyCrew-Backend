@@ -10,7 +10,7 @@ const userData = [
     lastName: "dummyLastName",
     email: "dummy@codecamp.com",
     password: hashedPassword,
-    address : "Centerpoint",
+    address: "Centerpoint",
     identicalNumber: "1111111111111",
     phoneNumber: "111111111",
     departmentId: 1,
@@ -20,10 +20,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
-    personalLeaveAmount : 3,
-    annualLeave : 10.0,
-    sickLeave : 30,
-    personalLeave : 3
+    personalLeaveAmount: 3,
+    annualLeave: 10.0,
+    sickLeave: 30,
+    personalLeave: 3,
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ const userData = [
     lastName: "Konjeng",
     email: "Faris@codecamp.com",
     password: hashedPassword,
-    address : "Centerpoint",
+    address: "Centerpoint",
     identicalNumber: "2111111111111",
     phoneNumber: "222222222",
     supId: 1,
@@ -42,10 +42,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
-    personalLeaveAmount : 3,
-    annualLeave : 10.0,
-    sickLeave : 30,
-    personalLeave : 3
+    personalLeaveAmount: 3,
+    annualLeave: 10.0,
+    sickLeave: 30,
+    personalLeave: 3,
   },
   {
     id: 3,
@@ -53,7 +53,7 @@ const userData = [
     lastName: "lolicon",
     email: "Mark@codecamp.com",
     password: hashedPassword,
-    address : "Centerpoint",
+    address: "Centerpoint",
     identicalNumber: "3111111111111",
     phoneNumber: "3333333333",
     supId: 1,
@@ -64,10 +64,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
-    personalLeaveAmount : 3,
-    annualLeave : 10.0,
-    sickLeave : 30,
-    personalLeave : 3
+    personalLeaveAmount: 3,
+    annualLeave: 10.0,
+    sickLeave: 30,
+    personalLeave: 3,
   },
   {
     id: 4,
@@ -75,7 +75,7 @@ const userData = [
     lastName: "bondage",
     email: "bond@codecamp.com",
     password: hashedPassword,
-    address : "Centerpoint",
+    address: "Centerpoint",
     identicalNumber: "4111111111111",
     phoneNumber: "444444444",
     supId: 2,
@@ -86,10 +86,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
-    personalLeaveAmount : 3,
-    annualLeave : 10.0,
-    sickLeave : 30,
-    personalLeave : 3
+    personalLeaveAmount: 3,
+    annualLeave: 10.0,
+    sickLeave: 30,
+    personalLeave: 3,
   },
   {
     id: 5,
@@ -97,7 +97,7 @@ const userData = [
     lastName: "SOD",
     email: "JP@codecamp.com",
     password: hashedPassword,
-    address : "Centerpoint",
+    address: "Centerpoint",
     identicalNumber: "5111111111111",
     phoneNumber: "5555555555",
     supId: 2,
@@ -108,10 +108,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
-    personalLeaveAmount : 3,
-    annualLeave : 10.0,
-    sickLeave : 30,
-    personalLeave : 3
+    personalLeaveAmount: 3,
+    annualLeave: 10.0,
+    sickLeave: 30,
+    personalLeave: 3,
   },
   {
     id: 6,
@@ -119,7 +119,7 @@ const userData = [
     lastName: "babyshark",
     email: "GAP@codecamp.com",
     password: hashedPassword,
-    address : "Centerpoint",
+    address: "Centerpoint",
     identicalNumber: "6111111111111",
     phoneNumber: "6666666666",
     supId: 3,
@@ -130,10 +130,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
-    personalLeaveAmount : 3,
-    annualLeave : 10.0,
-    sickLeave : 30,
-    personalLeave : 3
+    personalLeaveAmount: 3,
+    annualLeave: 10.0,
+    sickLeave: 30,
+    personalLeave: 3,
   },
   {
     id: 7,
@@ -141,7 +141,7 @@ const userData = [
     lastName: "Tidtee",
     email: "Tidtee@codecamp.com",
     password: hashedPassword,
-    address : "Centerpoint",
+    address: "Centerpoint",
     identicalNumber: "7111111111111",
     phoneNumber: "7777777777",
     supId: 3,
@@ -152,10 +152,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
-    personalLeaveAmount : 3,
-    annualLeave : 10.0,
-    sickLeave : 30,
-    personalLeave : 3
+    personalLeaveAmount: 3,
+    annualLeave: 10.0,
+    sickLeave: 30,
+    personalLeave: 3,
   },
 ];
 
@@ -212,43 +212,55 @@ const attandanceData = [
     isWorkingDay: true,
   },
 ];
-const payrollData =[
-    {
-        id : 1,
-        userId : 1,
-        paidAmount : 20000,
-        paidDate : new Date(2021, 12, 16),
-        salary : 20000,
-        compensation : 0
-    },{
-        id : 2,
-        userId : 2,
-        paidAmount : 20000,
-        paidDate : new Date(2021, 12, 16),
-        salary : 20000,
-        compensation : 0
-    }
-]
+const payrollData = [
+  {
+    id: 1,
+    userId: 1,
+    paidAmount: 20000,
+    paidDate: new Date(2021, 12, 16),
+    salary: 20000,
+    compensation: 0,
+  },
+  {
+    id: 2,
+    userId: 2,
+    paidAmount: 20000,
+    paidDate: new Date(2021, 12, 16),
+    salary: 20000,
+    compensation: 0,
+  },
+];
 const sessionData = [
-    {
-        id : 1,
-        targetDate : new Date(2021,12,15),
-        description : "training session",
-        eventType : "HR",
-        createdAt : new Date(),
-        attendanceLimit : 50,
-        createUserId : 1
-    }
-]
+  {
+    id: 1,
+    targetDate: new Date(2021, 12, 15),
+    description: "training session",
+    eventType: "HR",
+    createdAt: new Date(),
+    attendanceLimit: 50,
+    createUserId: 1,
+  },
+];
 const activityAttandanceData = [
-    {id : 1, sessionId : 1, userId:1},
-    {id : 2, sessionId : 1, userId : 2}
-]
+  { id: 1, sessionId: 1, userId: 1 },
+  { id: 2, sessionId: 1, userId: 2 },
+];
 const siteData = [
-  {id : 1, siteName : "Wannasorn building",latitude:13.758,longitude:100.535,area:10000},
-  {id : 2, siteName : "Paragon",latitude:13.746,longitude:100.534,area:10000} 
-]
-
+  {
+    id: 1,
+    siteName: "Wannasorn building",
+    latitude: 13.758,
+    longitude: 100.535,
+    area: 10000,
+  },
+  {
+    id: 2,
+    siteName: "Paragon",
+    latitude: 13.746,
+    longitude: 100.534,
+    area: 10000,
+  },
+];
 
 console.log("DB seed.....");
 
@@ -262,6 +274,6 @@ async function run() {
   await prisma.payroll.createMany({ data: payrollData });
   await prisma.session.createMany({ data: sessionData });
   await prisma.activityAttandance.createMany({ data: activityAttandanceData });
+  await prisma.site.createMany({ data: siteData });
 }
-
 run();

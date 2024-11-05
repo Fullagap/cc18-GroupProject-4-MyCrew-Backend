@@ -89,8 +89,8 @@ model Attendance {
 model Site {
   id        Int    @id @default(autoincrement())
   siteName  String @map("site_name")
-  latitude  String
-  longitude String
+  latitude  Float
+  longitude Float
   area      Int //in meter
 
   Attendances Attendance[]
