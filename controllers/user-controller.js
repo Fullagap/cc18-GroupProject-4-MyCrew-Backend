@@ -4,9 +4,9 @@ const createError = require("../utils/createError")
 
 exports.GetUser = async (req,res,next)=>{
     try {
-        const {id} = req.params
-        console.log(id)
-        const user = await getUserById(Number(id))
+        const {userid} = req.params
+        console.log(userid)
+        const user = await getUserById(Number(userid))
         if(!user){
             createError(500,"user is invalid")
         }
@@ -19,9 +19,9 @@ exports.GetUser = async (req,res,next)=>{
 
 exports.GetLeave = async (req,res,next)=>{
     try {
-        const {id} = req.params
-        console.log(id)
-        const user = await getUserById(Number(id))
+        const {userid} = req.params
+        console.log(userid)
+        const user = await getUserById(Number(userid))
         if(!user){
             createError(500,"user is invalid")
         }
@@ -39,9 +39,9 @@ exports.GetLeave = async (req,res,next)=>{
 
 exports.GetSalary = async (req,res,next)=>{
     try {
-        const {id} = req.params
-        console.log(id)
-        const user = await getUserById(Number(id))
+        const {userid} = req.params
+        console.log(userid)
+        const user = await getUserById(Number(userid))
         if(!user){
             createError(500,"user is invalid")
         }
@@ -56,9 +56,9 @@ exports.GetSalary = async (req,res,next)=>{
 
 exports.GetLeaveRecord = async (req,res,next)=>{
     try {
-        const {id} = req.params
-        console.log(id)
-        const rec = await getRecordByUserId(Number(id))
+        const {userid} = req.params
+        console.log(userid)
+        const rec = await getRecordByUserId(Number(userid))
         if(!rec){
             createError(500,"record is not valid")
         }

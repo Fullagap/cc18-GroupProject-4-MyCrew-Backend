@@ -27,27 +27,6 @@ enum adminRole {
 
 // User model
 model User {
-<<<<<<< HEAD
-  id                Int       @id @default(autoincrement())
-  firstName         String    @map("first_name")
-  lastName          String    @map("last_name")
-  email             String    @unique
-  password          String
-  identicalNumber   String    @unique @map("indentical_number")
-  phoneNumber       String    @map("phone_number")
-  supId             Int?      @map("sup_id")
-  departmentId      Int       @map("department_id")
-  positionId        Int       @map("position_id")
-  role              adminRole @default(USER)
-  bookBank          String
-  salary            Decimal
-  profileImg        String?
-  dateStart         DateTime  @default(now())
-  dateEnd           DateTime? @db.Date()
-  annualLeaveAmount Float
-  sickLeaveAmount   Int
-  WOPayAmount       Int?      @default(365) @map("wo-pay-amount")
-=======
   id                  Int       @id @default(autoincrement())
   firstName           String    @map("first_name")
   lastName            String    @map("last_name")
@@ -57,31 +36,31 @@ model User {
   identicalNumber     String    @unique @map("indentical_number")
   phoneNumber         String    @unique @map("phone_number")
   supId               Int?      @map("sup_id")
-  departmentId        Int       @map("department_id")
-  positionId          Int       @map("position_id")
+  departmentId        Int?      @map("department_id")
+  positionId          Int?      @map("position_id")
   role                adminRole @default(USER)
   bookBank            String
   salary              Decimal
   profileImg          String?
   dateStart           DateTime  @default(now())
   dateEnd             DateTime? @db.Date()
-  annualLeaveAmount   Float
-  sickLeaveAmount     Int
-  WOPayAmount         Int?      @default(365) @map("wo-pay-amount")
+  annualLeaveAmount   Float     @map("annual_leave_amount")
+  sickLeaveAmount     Int?      @default(30) @map("sick_leave_amount")
+  personalLeaveAmount Int?      @default(3) @map("personal_leave_amount")
+  annualLeave         Float     @map("annual_leave")
+  sickLeave           Int?      @default(30) @map("sick_leave")
+  personalLeave       Int?      @default(3) @map("personal_leave")
+
   passwordResetToken  String?
   passwordResetExpire DateTime?
->>>>>>> dev
 
   Attendances         Attendance[]
   Payrolls            Payroll[]
   RequestItems        RequestItem[]
   ActivityAttandances ActivityAttandance[]
-<<<<<<< HEAD
-=======
   LeaveRecords        LeaveRecord[]
->>>>>>> dev
 
-  position   Position    @relation(fields: [positionId], references: [id])
+  position   Position?   @relation(fields: [positionId], references: [id])
   Department Department? @relation(fields: [departmentId], references: [id])
 
   Sessions Session[]
@@ -91,15 +70,6 @@ model User {
 
 // Attendance model
 model Attendance {
-<<<<<<< HEAD
-  id           Int       @id @default(autoincrement())
-  userId       Int
-  date         DateTime  @db.Date()
-  checkInTime  DateTime
-  checkOutTime DateTime?
-  isWorkingDay Boolean
-  // status       Status?
-=======
   id               Int       @id @default(autoincrement())
   userId           Int
   date             DateTime  @db.Date()
@@ -110,16 +80,19 @@ model Attendance {
   checkOutLocation String?
   siteId           Int?
   // status       Status?
-  site             Site?      @relation(fields: [siteId], references: [id])
+  site             Site?     @relation(fields: [siteId], references: [id])
   user             User      @relation(fields: [userId], references: [id])
->>>>>>> dev
 
   @@map("attendance")
 }
 
 model Site {
-  id          Int          @id @default(autoincrement())
-  siteName    String       @map("site_name")
+  id        Int    @id @default(autoincrement())
+  siteName  String @map("site_name")
+  latitude  String
+  longitude String
+  area      Int //in meter
+
   Attendances Attendance[]
 
   @@map("site")

@@ -10,14 +10,9 @@ const userData = [
     lastName: "dummyLastName",
     email: "dummy@codecamp.com",
     password: hashedPassword,
-<<<<<<< HEAD
-    identicalNumber: "1111111111111",
-    phoneNumber: "023456789",
-=======
     address : "Centerpoint",
     identicalNumber: "1111111111111",
     phoneNumber: "111111111",
->>>>>>> dev
     departmentId: 1,
     positionId: 1,
     role: "ADMIN",
@@ -25,6 +20,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
+    personalLeaveAmount : 3,
+    annualLeave : 10.0,
+    sickLeave : 30,
+    personalLeave : 3
   },
   {
     id: 2,
@@ -32,14 +31,9 @@ const userData = [
     lastName: "Konjeng",
     email: "Faris@codecamp.com",
     password: hashedPassword,
-<<<<<<< HEAD
-    identicalNumber: "2111111111111",
-    phoneNumber: "023456789",
-=======
     address : "Centerpoint",
     identicalNumber: "2111111111111",
     phoneNumber: "222222222",
->>>>>>> dev
     supId: 1,
     departmentId: 1,
     positionId: 1,
@@ -48,9 +42,11 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
+    personalLeaveAmount : 3,
+    annualLeave : 10.0,
+    sickLeave : 30,
+    personalLeave : 3
   },
-<<<<<<< HEAD
-=======
   {
     id: 3,
     firstName: "mark",
@@ -68,6 +64,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
+    personalLeaveAmount : 3,
+    annualLeave : 10.0,
+    sickLeave : 30,
+    personalLeave : 3
   },
   {
     id: 4,
@@ -86,6 +86,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
+    personalLeaveAmount : 3,
+    annualLeave : 10.0,
+    sickLeave : 30,
+    personalLeave : 3
   },
   {
     id: 5,
@@ -104,6 +108,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
+    personalLeaveAmount : 3,
+    annualLeave : 10.0,
+    sickLeave : 30,
+    personalLeave : 3
   },
   {
     id: 6,
@@ -122,6 +130,10 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
+    personalLeaveAmount : 3,
+    annualLeave : 10.0,
+    sickLeave : 30,
+    personalLeave : 3
   },
   {
     id: 7,
@@ -140,8 +152,11 @@ const userData = [
     salary: 20000,
     annualLeaveAmount: 10.0,
     sickLeaveAmount: 30,
+    personalLeaveAmount : 3,
+    annualLeave : 10.0,
+    sickLeave : 30,
+    personalLeave : 3
   },
->>>>>>> dev
 ];
 
 const departmentData = [
@@ -151,12 +166,8 @@ const departmentData = [
 const positionData = [
   { id: 1, departmentId: 1, positionName: "Electircal Engineer" },
   { id: 2, departmentId: 1, positionName: "Mechanical Engineer" },
-<<<<<<< HEAD
-  { id: 3, departmentId: 2, positionName: "Clerk" },
-=======
   { id: 3, departmentId: 2, positionName: "Clerk A" },
   { id: 4, departmentId: 2, positionName: "Clerk B" },
->>>>>>> dev
 ];
 const leaveCategoryData = [
   { id: 1, leaveName: "annualLeave" },
@@ -233,15 +244,11 @@ const activityAttandanceData = [
     {id : 1, sessionId : 1, userId:1},
     {id : 2, sessionId : 1, userId : 2}
 ]
-<<<<<<< HEAD
-=======
 const siteData = [
-  {id : 1, siteName : "Central"},
-  {id : 2, siteName : "Paragon"}
-  
+  {id : 1, siteName : "Wannasorn building",latitude:13.758,longitude:100.535,area:10000},
+  {id : 2, siteName : "Paragon",latitude:13.746,longitude:100.534,area:10000} 
 ]
 
->>>>>>> dev
 
 console.log("DB seed.....");
 
