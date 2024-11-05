@@ -2,9 +2,10 @@ const express = require("express")
 const { GetUser, GetLeave, GetSalary, GetLeaveRecord } = require("../controllers/user-controller")
 const router = express.Router()
 
-router.get("/user/:id", GetUser)
-router.get("/user/leave/:id", GetLeave)
-router.get("/user/salary/:id", GetSalary)
-router.get("/user/leave-record/:id", GetLeaveRecord)
+router.get("/user/:userid", GetUser)
+router.get("/user/leave/:userid", GetLeave)
+router.get("/user/salary/:userid", GetSalary)
+router.get("/user/leave-record/:userid", GetLeaveRecord)
+
 
 module.exports = router
