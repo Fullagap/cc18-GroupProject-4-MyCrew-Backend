@@ -1,16 +1,21 @@
 const express = require("express")
 const router = express.Router()
-module.exports = router
-module.exports = router
-const {register,updateUser,getUserById,getDepartment,getPositionEachDepartment,getEmployeeInDepartment,getEachSuperId} = require("../controllers/admin-controller")
-const {authCheck,adminCheck} = require("../middlewares/authen")
+const { register, updateUser, getUserById, getDepartment, getPositionEachDepartment, getEmployeeInDepartment
+    , getEachSuperId, getLeaderEachSupId, getSupIdByDepartment, allEmployees, createDepartment, createPosition,getHeader } = require("../controllers/admin-controller")
+const { authCheck, adminCheck } = require("../middlewares/authen")
 
-router.post("/admin/register",register)
-router.patch("/admin/update-user/:id",authCheck,adminCheck,updateUser)
-router.get("/admin/user/:id",authCheck,adminCheck,getUserById)
-router.get("/admin/department",authCheck,adminCheck,getDepartment)
-router.get("/admin/department-position/:id",authCheck,adminCheck,getPositionEachDepartment)
-router.get("/admin/department-employees/:id",authCheck,adminCheck,getEmployeeInDepartment)
-router.get("/admin/superId-employees/:id",authCheck,adminCheck,getEachSuperId)
+router.post("/admin/register", register)
+router.patch("/admin/update-user/:id", updateUser)
+router.get("/admin/user/:id", authCheck, adminCheck, getUserById)
+router.get("/admin/department", getDepartment)
+router.get("/admin/All-employees", allEmployees)
+router.get("/admin/department-position/:id", getPositionEachDepartment)
+router.get("/admin/department-employees/:id", getEmployeeInDepartment)
+router.get("/admin/superId-employees/:id", authCheck, adminCheck, getEachSuperId)
+router.get("/admin/leader-superId/:id", authCheck, adminCheck, getLeaderEachSupId)
+router.get("/admin/superId-department/:id", authCheck, adminCheck, getSupIdByDepartment)
+router.post("/admin/create-department", createDepartment)
+router.post("/admin/create-position", createPosition)
+router.get("/admin/leader", getHeader)
 
 module.exports = router
