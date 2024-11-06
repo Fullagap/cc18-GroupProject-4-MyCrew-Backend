@@ -74,8 +74,8 @@ exports.register = async (req, res, next) => {
       subject: "Password for login",
       html: `
                 <p>Dear ${firstName},</p>
-                <p>Here is your email to login :${email}.</p>
-                <p>password:${identityCardNumber}.</p>
+                <p>Here is your email to login: ${email}.</p>
+                <p>Password: ${identicalNumber}.</p>
                 <p>MyCrew Admin</p>
             `,
     };
@@ -523,7 +523,7 @@ exports.createOfficeSiteLocation = async (req, res, next) => {
         siteName,
         latitude: Number(latitude),
         longitude: Number(longitude),
-        area:Number(area),
+        area: Number(area),
       },
     });
 
@@ -539,8 +539,5 @@ exports.createOfficeSiteLocation = async (req, res, next) => {
         error: "A site with this name already exists",
       });
     }
-    next(err);
   }
 };
-
-
