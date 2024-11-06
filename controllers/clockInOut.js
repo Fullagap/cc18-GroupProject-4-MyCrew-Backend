@@ -31,7 +31,7 @@ module.exports.clockIn = async (req, res, next) => {
     // Mock user data
     const userId = 1; // Test user ID,actually we get it from token
     const currentDate = new Date();
-
+    
     // Check if user standing in area or not
     if (distance > officeLocation.radius) {
       return res.status(400).json({
