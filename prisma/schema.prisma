@@ -111,6 +111,9 @@ model Payroll {
   paidDate     DateTime
   salary       Decimal
   compensation Decimal
+  tax          Decimal
+  providentFund Decimal @map("provident_fund")
+
 
   user User @relation(fields: [userId], references: [id])
 }
@@ -131,6 +134,7 @@ model RequestItem {
   id     Int @id @default(autoincrement())
   userId Int @map("user_id")
   itemId Int @map("item_id")
+  description String?
   status Status
 
   user User @relation(fields: [userId], references: [id])
