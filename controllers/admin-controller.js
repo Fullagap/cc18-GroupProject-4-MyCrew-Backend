@@ -112,25 +112,25 @@ exports.register = async (req, res, next) => {
 };
 
 
-exports.allEmployees = async (req, res, next) => {
+exports.allEmployees = async(req,res,next)=>{
     try {
         const employees = await prisma.user.findMany({
-            include: {
-                position: {
-                    select: {
-                        positionName: true,
-
+             include:{
+                position:{
+                    select:{
+                        positionName:true,
+    
                     }
-                },
-                Department: {
-                    select: {
+                   },
+                   Department:{
+                    select:{
                         departmentName: true
                     }
-                }
-            }
+                   }
+             }
         })
 
-        const employeesDetail = employees.map(({ password, dateEnd, profileImg, ...userData }) => userData);
+        const employeesDetail = employees.map(({ password,dateEnd,profileImg, ...userData }) => userData);
         res.json(employeesDetail)
     } catch (err) {
         next(err)
@@ -138,67 +138,67 @@ exports.allEmployees = async (req, res, next) => {
 }
 
 exports.updateUser = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const updateData = {};
+  try {
+    const { id } = req.params;
+    const updateData = {};
 
-        if (req.body.email) updateData.email = req.body.email;
-        if (req.body.phoneNumber) updateData.phoneNumber = req.body.phoneNumber;
-        if (req.body.departmentId) updateData.departmentId = req.body.departmentId;
-        if (req.body.positionId) updateData.positionId = req.body.positionId;
-        if (req.body.bookBank) updateData.bookBank = req.body.bookBank;
-        if (req.body.salary) updateData.salary = req.body.salary;
+    if (req.body.email) updateData.email = req.body.email;
+    if (req.body.phoneNumber) updateData.phoneNumber = req.body.phoneNumber;
+    if (req.body.departmentId) updateData.departmentId = req.body.departmentId;
+    if (req.body.positionId) updateData.positionId = req.body.positionId;
+    if (req.body.bookBank) updateData.bookBank = req.body.bookBank;
+    if (req.body.salary) updateData.salary = req.body.salary;
 
-        if (req.body.annualLeaveAmount) {
-            const annualLeaveAmount = parseInt(req.body.annualLeaveAmount, 10);
-            if (!isNaN(annualLeaveAmount)) {
-                updateData.annualLeaveAmount = annualLeaveAmount;
-            } else {
-                return createError(400, "Invalid annualLeaveAmount");
-            }
-        }
+    if (req.body.annualLeaveAmount) {
+      const annualLeaveAmount = parseInt(req.body.annualLeaveAmount, 10);
+      if (!isNaN(annualLeaveAmount)) {
+        updateData.annualLeaveAmount = annualLeaveAmount;
+      } else {
+        return createError(400, "Invalid annualLeaveAmount");
+      }
+    }
 
-        if (req.body.sickLeaveAmount) {
-            const sickLeaveAmount = parseInt(req.body.sickLeaveAmount, 10); // Fix here: change WOPayAmount to sickLeaveAmount
-            if (!isNaN(sickLeaveAmount)) {
-                updateData.sickLeaveAmount = sickLeaveAmount; // Use sickLeaveAmount instead of wOPayAmount
-            } else {
-                return createError(400, "Invalid sickLeaveAmount");
-            }
-        }
+    if (req.body.sickLeaveAmount) {
+      const sickLeaveAmount = parseInt(req.body.sickLeaveAmount, 10); // Fix here: change WOPayAmount to sickLeaveAmount
+      if (!isNaN(sickLeaveAmount)) {
+        updateData.sickLeaveAmount = sickLeaveAmount; // Use sickLeaveAmount instead of wOPayAmount
+      } else {
+        return createError(400, "Invalid sickLeaveAmount");
+      }
+    }
 
-        if (req.body.personalLeaveAmount) {
-            const personalLeaveAmount = parseInt(req.body.personalLeaveAmount, 10);
-            if (!isNaN(personalLeaveAmount)) {
-                updateData.personalLeaveAmount = personalLeaveAmount;
+        if (req.body.WOPayAmount) {
+            const wOPayAmount = parseInt(req.body.WOPayAmount, 10);
+            if (!isNaN(wOPayAmount)) {
+                updateData.WOPayAmount = wOPayAmount;
             } else {
                 return createError(400, "Invalid WOPayAmount");
             }
         }
 
-        if (req.body.supId) updateData.supId = req.body.supId;
+    if (req.body.supId) updateData.supId = req.body.supId;
 
-        console.log("updateData", updateData);
+    console.log("updateData", updateData);
 
-        const updatedUser = await prisma.user.update({
-            where: { id: +id },
-            data: updateData
-        });
+    const updatedUser = await prisma.user.update({
+      where: { id: +id },
+      data: updateData,
+    });
 
-        res.json("Update successful");
-    } catch (err) {
-        next(err);
-    }
+    res.json("Update successful");
+  } catch (err) {
+    next(err);
+  }
 };
 
 
-exports.getUserById = async (req, res, next) => {
+exports.getUserById = async(req,res,next)=>{
     try {
-        const { id } = req.params
+        const {id} = req.params
 
         const user = await prisma.user.findFirst({
-            where: { id: +id },
-            select: {
+            where:{id: +id},
+            select:{
                 id: true,
                 firstName: true,
                 lastName: true,
@@ -210,14 +210,14 @@ exports.getUserById = async (req, res, next) => {
                 role: true,
                 bookBank: true,
                 salary: true,
-                annualLeaveAmount: true,
-                sickLeaveAmount: true,
-                personalLeaveAmount: true,
-                position: {
-                    select: { positionName: true }
+                annualLeaveAmount:true,
+                sickLeaveAmount:true,
+                WOPayAmount:true,
+                position:{
+                    select: {positionName: true}
                 },
-                Department: {
-                    select: { departmentName: true }
+                Department:{
+                    select: {departmentName: true}
                 }
             }
         })
@@ -227,15 +227,15 @@ exports.getUserById = async (req, res, next) => {
     }
 }
 
-exports.getDepartment = async (req, res, next) => {
+exports.getDepartment = async(req,res,next)=>{
     try {
         const department = await prisma.department.findMany({})
 
-        res.json(department)
-    } catch (err) {
-        console.log(err)
-    }
-}
+    res.json(department);
+  } catch (err) {
+    console.log(err);
+  }
+};
 // exports.getSupId = async(req,res,next)=>{
 //     try {
 //         const getSupId = await prisma.user.findMany({
@@ -246,37 +246,37 @@ exports.getDepartment = async (req, res, next) => {
 //     }
 // }
 
-exports.getPositionEachDepartment = async (req, res, next) => {
+exports.getPositionEachDepartment = async(req,res,next)=>{
     try {
 
-        const { id } = req.params
+        const {id} = req.params
         console.log(id)
         const position = await prisma.position.findMany({
-            where: { departmentId: +id }
+          where:{departmentId: +id}
         })
         res.json(position)
     } catch (err) {
         next(err)
     }
 }
-exports.getEmployeeInDepartment = async (req, res, next) => {
+exports.getEmployeeInDepartment = async(req,res,next)=>{
     try {
-        const { id } = req.params
+        const {id}= req.params
         const employees = await prisma.department.findMany({
-            where: {
-                id: +id
+            where:{
+                id:+id
             },
-            select: {
+            select:{
                 departmentName: true,
-                Users: {
-                    select: {
+                Users:{
+                    select:{
                         id: true,
                         firstName: true,
                         lastName: true,
                         email: true,
                         identicalNumber: true,
-                        position: {
-                            select: {
+                        position:{
+                            select:{
                                 positionName: true
                             }
                         }
@@ -299,186 +299,184 @@ exports.getEachSuperId = async (req, res, next) => {
             where: {
                 supId: +id
             },
-            include: {
-                position: {
-                    select: {
-                        positionName: true,
+            include:{
+               position:{
+                select:{
+                    positionName:true,
 
-                    }
-                },
-                Department: {
-                    select: {
-                        departmentName: true
-                    }
                 }
+               },
+               Department:{
+                select:{
+                    departmentName: true
+                }
+               }
 
             }
         });
 
-        const employeeEachSuperId = superId.map(({ password, identicalNumber, dateStart, dateEnd, profileImg, ...userData }) => userData);
+        const employeeEachSuperId = superId.map(({ password, identicalNumber, dateStart, dateEnd,profileImg, ...userData }) => userData);
 
-        res.json(employeeEachSuperId);
-    } catch (err) {
-        next(err);
-    }
+    res.json(employeeEachSuperId);
+  } catch (err) {
+    next(err);
+  }
 };
 
 exports.getLeaderEachSupId = async (req, res, next) => {
-    try {
-        const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-        // Step 1: Check if the provided `supId` is 1 and find the top-level leader with `supId: null`
-        let leader;
-        if (+id === 1) {
-            leader = await prisma.user.findFirst({
-                where: {
-                    supId: null, // Find the top leader
-                },
-                include: {
-                    position: {
-                        select: {
-                            positionName: true,
-                        },
-                    },
-                    Department: {
-                        select: {
-                            departmentName: true,
-                        },
-                    },
-                },
-            });
-        } else {
-            //if subId is not 1, directly find the leader with that `supId`
-            leader = await prisma.user.findFirst({
-                where: {
-                    id: +id,
-                },
-                include: {
-                    position: {
-                        select: {
-                            positionName: true,
-                        },
-                    },
-                    Department: {
-                        select: {
-                            departmentName: true,
-                        },
-                    },
-                },
-            });
-        }
-
-        // Handle case where no leader is found
-        if (!leader) {
-            return next(createError(400, "Leader not found"));
-        }
-
-        // Step 3: Find subordinates using the leader's `id` as `supId`
-        const subordinates = await prisma.user.findMany({
-            where: {
-                supId: leader.id,
-            },
-            orderBy: {
-                dateStart: 'asc',
-            },
+    // Step 1: Check if the provided `supId` is 1 and find the top-level leader with `supId: null`
+    let leader;
+    if (+id === 1) {
+      leader = await prisma.user.findFirst({
+        where: {
+          supId: null, // Find the top leader
+        },
+        include: {
+          position: {
             select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                email: true,
-                position: {
-                    select: {
-                        positionName: true,
-                    },
-                },
-                Department: {
-                    select: {
-                        departmentName: true,
-                    },
-                },
+              positionName: true,
             },
-        });
-
-        // Step 4: Return the leader and their subordinates
-        res.json({
-            leader: {
-                id: leader.id,
-                firstName: leader.firstName,
-                lastName: leader.lastName,
-                superId: leader.supId,
-                position: leader.position.positionName,
-                department: leader.Department?.departmentName,
+          },
+          Department: {
+            select: {
+              departmentName: true,
             },
-            subordinates,
-        });
-    } catch (err) {
-        next(err);
+          },
+        },
+      });
+    } else {
+      //if subId is not 1, directly find the leader with that `supId`
+      leader = await prisma.user.findFirst({
+        where: {
+          id: +id,
+        },
+        include: {
+          position: {
+            select: {
+              positionName: true,
+            },
+          },
+          Department: {
+            select: {
+              departmentName: true,
+            },
+          },
+        },
+      });
     }
+
+    // Handle case where no leader is found
+    if (!leader) {
+      return next(createError(400, "Leader not found"));
+    }
+
+    // Step 3: Find subordinates using the leader's `id` as `supId`
+    const subordinates = await prisma.user.findMany({
+      where: {
+        supId: leader.id,
+      },
+      orderBy: {
+        dateStart: "asc",
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        position: {
+          select: {
+            positionName: true,
+          },
+        },
+        Department: {
+          select: {
+            departmentName: true,
+          },
+        },
+      },
+    });
+
+    // Step 4: Return the leader and their subordinates
+    res.json({
+      leader: {
+        id: leader.id,
+        firstName: leader.firstName,
+        lastName: leader.lastName,
+        superId: leader.supId,
+        position: leader.position.positionName,
+        department: leader.Department?.departmentName,
+      },
+      subordinates,
+    });
+  } catch (err) {
+    next(err);
+  }
 };
-
-
 
 exports.getSupIdByDepartment = async (req, res, next) => {
-    try {
-        const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-        const department = await prisma.department.findUnique({
-            where: {
-                id: +id,
+    const department = await prisma.department.findUnique({
+      where: {
+        id: +id,
+      },
+      select: {
+        id: true,
+        departmentName: true,
+        Users: {
+          select: {
+            supId: true,
+          },
+          distinct: ["supId"],
+          where: {
+            supId: {
+              not: null, // Exclude null supId values if needed
             },
-            select: {
-                id: true,
-                departmentName: true,
-                Users: {
-                    select: {
-                        supId: true,
-                    },
-                    distinct: ['supId'],
-                    where: {
-                        supId: {
-                            not: null, // Exclude null supId values if needed
-                        },
-                    },
-                },
-            },
-        });
+          },
+        },
+      },
+    });
 
-        if (!department) {
-            return res.status(404).json({ message: "Department not found" });
-        }
-
-        // Format the result to show unique supId for the department
-        const result = {
-            departmentId: department.id,
-            departmentName: department.departmentName,
-            supIds: department.Users.map(user => user.supId),
-        };
-
-        res.json(result);
-    } catch (err) {
-        next(err);
+    if (!department) {
+      return res.status(404).json({ message: "Department not found" });
     }
+
+    // Format the result to show unique supId for the department
+    const result = {
+      departmentId: department.id,
+      departmentName: department.departmentName,
+      supIds: department.Users.map((user) => user.supId),
+    };
+
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.createDepartment = async (req, res, next) => {
+exports.createDepartment = async(req,res,next)=>{
 
     try {
-
-        const { departmentName } = req.body
+        
+        const {departmentName} = req.body
 
         const department = await prisma.department.findFirst({
-            where: {
-                departmentName: departmentName
+            where:{
+                departmentName:departmentName
             }
         })
 
-        if (department) {
-            return createError(400, "This department already exist")
+        if(department){
+            return createError(400,"This department already exist")
         }
 
         await prisma.department.create({
-
-            data: { departmentName: departmentName }
+               
+               data:{departmentName:departmentName}
         })
         res.json('Create successfully')
     } catch (err) {
@@ -487,15 +485,15 @@ exports.createDepartment = async (req, res, next) => {
 
 }
 
-exports.createPosition = async (req, res, next) => {
+exports.createPosition = async(req,res,next)=>{
     try {
-        const { departmentId, positionName } = req.body
+        const {departmentId,positionName} = req.body
 
-        const position = await prisma.position.create({
-
-            data: {
-                departmentId: +departmentId,
-                positionName: positionName
+        const position =await prisma.position.create({
+               
+               data:{
+                departmentId:+departmentId,
+                positionName:positionName
             }
         })
         res.json('Create successfully')
@@ -504,11 +502,11 @@ exports.createPosition = async (req, res, next) => {
     }
 }
 
-exports.getHeader = async (req, res, next) => {
+exports.getHeader = async(req,res,next)=>{
     try {
         const leader = await prisma.user.findFirst({
-            where: { supId: null },
-            select: {
+            where:{supId:null},
+            select:{
                 id: true,
                 firstName: true,
                 lastName: true,
@@ -575,4 +573,4 @@ exports.updateImageProfile = async (req, res, next) => {
     }
 };
 
-
+}
