@@ -19,7 +19,6 @@ router.get("/admin/superId-department/:id", authCheck, adminCheck, getSupIdByDep
 router.post("/admin/create-department", createDepartment)
 router.post("/admin/create-position", createPosition)
 router.get("/admin/leader", getHeader)
-// router.post('/admin/site-register',createOfficeSiteLocation)
 router.get("/admin/supId",authCheck,getLeadSupId)
 router.patch("/admin/update-profile",authCheck,upload.single("file"),updateImageProfile)
 
