@@ -10,7 +10,7 @@ module.exports.clockIn = async (req, res, next) => {
     const officeLocation = {
       latitude: 13.7563, // Example: Wannasorn building
       longitude: 100.5018,
-      radius: 100, // meters
+      radius: 500, // meters
     };
 
     // Calculate distance (simplified for testing)
@@ -24,7 +24,7 @@ module.exports.clockIn = async (req, res, next) => {
     // Mock user data
     const userId = 1; // Test user ID,actually we get it from token
     const currentDate = new Date();
-
+    
     // Check if user standing in area or not
     if (distance > officeLocation.radius) {
       return res.status(400).json({
@@ -39,13 +39,16 @@ module.exports.clockIn = async (req, res, next) => {
     const attendance = await prisma.attendance.create({
       data: {
         userId: userId,
-        date: currentDate,
+        year:currentDate.getFullYear(),
+        month:currentDate.getMonth()+1,
+        date: currentDate.getDate(),
+        day:currentDate.getDay(),
+        dateTime:currentDate,
         checkInTime: currentDate,
-        isWorkingDay: true,
+        isWorkingDay: !(currentDate.getDay()===6)?!(currentDate.getDay()===0)?true:false:false,
         // checkInLocation: `${latitude},${longitude}` // we will record where user logged-in are we?
       },
     });
-
     res.json({
       ok: true,
       message: "Clock in successful",
@@ -90,10 +93,13 @@ module.exports.clockOut = async (req, res, next) => {
     const existingAttendance = await prisma.attendance.findFirst({
       where: {
         userId: userId,
-        date: {
-          gte: new Date(currentDate.setHours(0, 0, 0, 0)),
-          lt: new Date(currentDate.setHours(23, 59, 59, 999)),
-        },
+        year:currentDate.getFullYear(),
+        month:currentDate.getMonth(),
+        date: currentDate.getDate(),
+        // date: {
+        //   gte: new Date(currentDate.setHours(0, 0, 0, 0)),
+        //   lt: new Date(currentDate.setHours(23, 59, 59, 999)),
+        // },
       },
     });
 

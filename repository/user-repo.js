@@ -3,7 +3,32 @@ const prisma = require("../config/prisma")
 
 exports.getUserById = async(id)=>{
     try {
-        const data = {where : {id:id}}
+        const data = {where : {id:id}, select:{
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phoneNumber: true,
+            supId: true,
+            departmentId: true,
+            positionId: true,
+            role: true,
+            profileImg : true,
+            address: true,
+            salary : true,
+            annualLeaveAmount : true,
+            sickLeaveAmount : true,
+            personalLeaveAmount : true,
+            annualLeave : true,
+            sickLeave: true,
+            personalLeave : true,
+            position:{
+                select: {positionName: true}
+            },
+            Department:{
+                select: {departmentName: true}
+            }
+        }}
         const resp = await prisma.user.findFirst(data)
         return resp
     } catch (error) {
