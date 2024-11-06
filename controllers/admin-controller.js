@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
 const cloudinary = require("../config/cloudinary")
 
+const fs = require("fs/promises")
+
 
 exports.register = async (req, res, next) => {
     try {
@@ -565,6 +567,7 @@ exports.updateImageProfile = async (req, res, next) => {
                 profileImg: photo
             }
         });
+        fs.unlink(req.file.path)
 
         res.json("Update User profile successfully");
     } catch (err) {
