@@ -221,6 +221,29 @@ const attandanceData = [
     isWorkingDay: true,
   },
 ];
+function createAttandanceSeed()
+{
+  let arr = []
+  for (let i = 1; i <20; i++) {
+    const year = 2024;
+    const month = 10;
+    const date = 2+i;
+    const mockDate = new Date(year,month,date);
+    arr.push({
+      id: i,
+      userId: 1,
+      year:mockDate.getFullYear(),
+      month:mockDate.getMonth(),
+      date:mockDate.getDate(),
+      day: mockDate.getDay(),
+      dateTime: mockDate,
+      checkInTime: mockDate,
+      checkOutTime: mockDate,
+      isWorkingDay: !(mockDate.getDay()===6)?!(mockDate.getDay()===0)?true:false:false,
+    })
+  }
+  return arr
+}
 const payrollData = [
   {
     id: 1,
@@ -229,6 +252,8 @@ const payrollData = [
     paidDate: new Date(2021, 12, 16),
     salary: 20000,
     compensation: 0,
+    tax:0,
+    providentFund:0,
   },
   {
     id: 2,
@@ -237,13 +262,15 @@ const payrollData = [
     paidDate: new Date(2021, 12, 16),
     salary: 20000,
     compensation: 0,
+    tax:0,
+    providentFund:0,
   },
 ];
 const sessionData = [
   {
     id: 1,
     startedDate: new Date(2021, 12, 15),
-    endDate: "training session",
+    endDate: new Date(2021, 12, 15),
     eventType: "HR",
     createdAt: new Date(),
     attendanceLimit: 50,
@@ -279,7 +306,7 @@ async function run() {
   await prisma.user.createMany({ data: userData });
   await prisma.leaveCategory.createMany({ data: leaveCategoryData });
   await prisma.leaveRecord.createMany({ data: leaveRecordData });
-  await prisma.attendance.createMany({ data: attandanceData });
+  await prisma.attendance.createMany({ data: createAttandanceSeed() });
   await prisma.payroll.createMany({ data: payrollData });
   await prisma.session.createMany({ data: sessionData });
   await prisma.activityAttandance.createMany({ data: activityAttandanceData });
