@@ -2,20 +2,18 @@
 const createError = require("../utils/createError");
 const prisma = require("../config/prisma");
 
-
 module.exports.clockIn = async (req, res, next) => {
   try {
-    const { latitude, longitude,location} = req.body;
+    const { latitude, longitude, location } = req.body;
 
     // get location to compare
 
     const locationData = await prisma.site.findFirst({
-      where:{
-        id:location
-      }
-    })
+      where: {
+        id: location,
+      },
+    });
 
-    // Mock-up office location (for testing)
     const officeLocation = {
       latitude: locationData.latitude, // Example: Wannasorn building
       longitude: locationData.longitude,
@@ -31,9 +29,9 @@ module.exports.clockIn = async (req, res, next) => {
     );
 
     // Mock user data
-    const userId = 5; // Test user ID,actually we get it from token
+    const userId = 1; // Test user ID,actually we get it from token
     const currentDate = new Date();
-    
+
     // Check if user standing in area or not
     if (distance > officeLocation.radius) {
       return res.status(400).json({
@@ -45,16 +43,39 @@ module.exports.clockIn = async (req, res, next) => {
     }
 
     // Create attendance record
+
+    // check if user already clock-in or not
+    const isClockIn = await prisma.attendance.findFirst({
+      where: {
+        userId: userId,
+        year: currentDate.getFullYear(),
+        month: currentDate.getMonth() + 1,
+        date: currentDate.getDate(),
+        day: currentDate.getDay(),
+      },
+    });
+
+    if (isClockIn) {
+      return res.json({
+        ok: false,
+        message: "You have already clocked in today"  ,
+      });
+    }
+
     const attendance = await prisma.attendance.create({
       data: {
         userId: userId,
-        year:currentDate.getFullYear(),
-        month:currentDate.getMonth()+1,
+        year: currentDate.getFullYear(),
+        month: currentDate.getMonth() + 1,
         date: currentDate.getDate(),
-        day:currentDate.getDay(),
-        dateTime:currentDate,
+        day: currentDate.getDay(),
+        dateTime: currentDate,
         checkInTime: currentDate,
-        isWorkingDay: !(currentDate.getDay()===6)?!(currentDate.getDay()===0)?true:false:false,
+        isWorkingDay: !(currentDate.getDay() === 6)
+          ? !(currentDate.getDay() === 0)
+            ? true
+            : false
+          : false,
         // checkInLocation: `${latitude},${longitude}` // we will record where user logged-in are we?
       },
     });
@@ -94,16 +115,16 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 module.exports.clockOut = async (req, res, next) => {
   try {
-    const { latitude, longitude,location } = req.body;
-    const userId = 5; // Test user ID
+    const { latitude, longitude, location } = req.body;
+    const userId = 1; // Test user ID
     const currentDate = new Date();
 
     // Find today's attendance record
     const existingAttendance = await prisma.attendance.findFirst({
       where: {
         userId: userId,
-        year:currentDate.getFullYear(),
-        month:currentDate.getMonth(),
+        year: currentDate.getFullYear(),
+        month: currentDate.getMonth() + 1,
         date: currentDate.getDate(),
         // date: {
         //   gte: new Date(currentDate.setHours(0, 0, 0, 0)),
