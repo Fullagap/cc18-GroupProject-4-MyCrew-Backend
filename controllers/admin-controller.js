@@ -209,7 +209,7 @@ exports.getUserById = async(req,res,next)=>{
                 salary: true,
                 annualLeaveAmount:true,
                 sickLeaveAmount:true,
-                WOPayAmount:true,
+                // WOPayAmount:true,
                 position:{
                     select: {positionName: true}
                 },

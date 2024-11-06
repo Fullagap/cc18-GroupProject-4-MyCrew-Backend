@@ -6,6 +6,21 @@ calendarService.getCalendar = async () => await prisma.calendar.findMany();
 calendarService.getLeaveRecord = async () =>
   await prisma.leaveRecord.findMany();
 
+calendarService.addLeaveRequest = async (userId,requestDate,startDate,endDate,leaveTypeId,supId,status,description) =>
+  await prisma.leaveRecord.create({
+    data:{
+      userId: parseInt(userId),
+      requestDate: new Date(requestDate),
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      leaveTypeId: parseInt(leaveTypeId),
+      supId: parseInt(supId),
+      status,
+      description,
+      // leaveCategoryId: parseInt(leaveTypeId)
+    }
+  });
+
 calendarService.getLeaveRecordById = async (userId) =>
   await prisma.leaveRecord.findMany({
     where: { userId: parseInt(userId) },
@@ -14,6 +29,7 @@ calendarService.getLeaveRecordById = async (userId) =>
 
 calendarService.getSession = async () =>
   await prisma.session.findMany();
+
 
 calendarService.addSession = async (
   createUserId, startedDate,endDate,description,eventType,attendanceLimit

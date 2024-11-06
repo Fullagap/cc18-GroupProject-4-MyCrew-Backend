@@ -12,6 +12,9 @@ router.post("/calendar/session/addSession", calendarController.addSession); // �
 router.patch("/calendar/session/updateSession/:sessionId", calendarController.updateSession); // เพิ่ม memo 
 router.delete("/calendar/deleteSession/:sessionId", calendarController.deleteSession); // ลบ memo 
 
+router.post("/calendar/leaveRequest/addLeaveRequest", calendarController.addLeaveRequest); // ลบ memo 
+
+
 // router.get("/calendar/memo/:date", calendarController.getHoliday);   // ดู memo ในวันที่เลือก
 // router.post("/calendar/memo", calendarController.addHoliday);        // เพิ่ม memo 
 // router.delete("/calendar/deleteMemo/:memoId", calendarController.deleteHoliday); // ลบ memo 
