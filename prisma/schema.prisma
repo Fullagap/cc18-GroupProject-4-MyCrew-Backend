@@ -79,7 +79,7 @@ model Attendance {
   dateTime         DateTime  @db.Date()
   checkInTime      DateTime
   checkOutTime     DateTime?
-  workingHour      Int
+  workingHour      Int?
   isWorkingDay     Boolean
   checkInLocation  String?
   checkOutLocation String?
