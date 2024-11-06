@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
+const { date } = require("joi");
 const prisma = new PrismaClient();
 const hashedPassword = bcrypt.hashSync("123456", 10);
 
@@ -198,7 +199,11 @@ const attandanceData = [
   {
     id: 1,
     userId: 2,
-    date: new Date(2021, 12, 15),
+    year:2021,
+    month:12,
+    date:15,
+    day: 3,
+    dateTime: new Date(2021, 12, 15),
     checkInTime: new Date(),
     checkOutTime: new Date(),
     isWorkingDay: true,
@@ -206,7 +211,11 @@ const attandanceData = [
   {
     id: 2,
     userId: 2,
-    date: new Date(2021, 12, 16),
+    year:2021,
+    month:12,
+    date:16,
+    day: 4,
+    dateTime: new Date(2021, 12, 16),
     checkInTime: new Date(),
     checkOutTime: new Date(),
     isWorkingDay: true,
@@ -233,8 +242,8 @@ const payrollData = [
 const sessionData = [
   {
     id: 1,
-    targetDate: new Date(2021, 12, 15),
-    description: "training session",
+    startedDate: new Date(2021, 12, 15),
+    endDate: "training session",
     eventType: "HR",
     createdAt: new Date(),
     attendanceLimit: 50,
