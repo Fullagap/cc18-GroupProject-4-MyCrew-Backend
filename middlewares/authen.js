@@ -16,23 +16,20 @@ exports.authCheck = async (req,res,next) => {
         }
 
         const payload = jwt.verify(token, process.env.JWT_SECRET)
-        console.log("playyyyyyyyy",payload)
 
         const foundUser = await prisma.user.findUnique({
             where : {
                 id : payload.user.id
             }
         })
-        console.log("foundUser",foundUser)
 
         if (!foundUser) {
             createError(401,"Unauthorized")
         }
         console.log(foundUser)
 
-        const {password ,identityCardNumber,dateStart , dateEnd, ...useData} = foundUser
+        const {password ,identicalNumber,dateStart , dateEnd, ...useData} = foundUser
         req.user = useData
-        console.log("userrrrrr",req.user)
 
         next()
   } catch (err) {

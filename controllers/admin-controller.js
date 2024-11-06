@@ -3,74 +3,95 @@ const createError = require("../utils/createError")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
+const cloudinary = require("../config/cloudinary")
 
 
-exports.register = async(req,res,next)=>{
-  
+exports.register = async (req, res, next) => {
     try {
+        const {
+            firstName,
+            lastName,
+            email,
+            identicalNumber,
+            phoneNumber,
+            departmentId,
+            positionId,
+            bookBank,
+            salary,
+            dateStart,
+            annualLeaveAmount,
+            sickLeaveAmount,
+            WOPayAmount,
+            supId
+        } = req.body;
 
-        const {firstName,lastName,email,identicalNumber,phoneNumber,departmentId,positionId,bookBank,salary,dateStart,annualLeaveAmount,sickLeaveAmount,WOPayAmount,supId} = req.body
+        // Validate dateStart
+        if (!dateStart) {
+            return createError(400, 'Date start is required.');
+        }
 
-        
+        const parsedDateStart = new Date(dateStart);
+        if (isNaN(parsedDateStart.getTime())) {
+            return createError(400, 'Invalid date format for dateStart.');
+        }
+
         const checkEmail = await prisma.user.findFirst({
-            where:{email:email}
-        }) 
-        if(checkEmail){
-            return createError(400,'This user already exist')
+            where: { email: email }
+        });
+        if (checkEmail) {
+            return createError(400, 'This user already exists');
         }
-        const checkIdentityCardNumber = await prisma.user.findFirst({
-            where:{identicalNumber:identicalNumber}
-        }) 
-        if(checkIdentityCardNumber){
-            return createError(400,'This user already exist')
-        }
-        const password = identicalNumber
 
-        const hashPassword = await bcrypt.hash(password,10)
-        
+        const checkIdentityCardNumber = await prisma.user.findFirst({
+            where: { identicalNumber: identicalNumber }
+        });
+        if (checkIdentityCardNumber) {
+            return createError(400, 'This user already exists');
+        }
+
+        const password = identicalNumber;
+        const hashPassword = await bcrypt.hash(password, 10);
+
         const newUser = await prisma.user.create({
-            data:{
+            data: {
                 firstName,
                 lastName,
                 identicalNumber,
                 email,
                 phoneNumber,
-                password:hashPassword,
-                departmentId:+departmentId ,
+                password: hashPassword,
+                departmentId: +departmentId,
                 positionId: +positionId,
                 bookBank,
                 salary,
-                dateStart: new Date(dateStart),
+                dateStart: parsedDateStart, // Use the validated date
                 annualLeaveAmount: +annualLeaveAmount,
                 sickLeaveAmount: +sickLeaveAmount,
                 WOPayAmount: +WOPayAmount,
                 supId: +supId
             }
-        })
-    //    console.log("newww",newUser.supId)
+        });
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'nattapongbe@gmail.com', 
-                pass: 'uznb twuk cicb omxw',   
+                user: 'nattapongbe@gmail.com',
+                pass: 'uznb twuk cicb omxw', // Consider using environment variables for sensitive info
             },
         });
 
-     
         const mailOptions = {
-            from: 'nattapongbe@gmail.com', 
-            to: email,         
+            from: 'nattapongbe@gmail.com',
+            to: email,
             subject: 'Password for login',
             html: `
                 <p>Dear ${firstName},</p>
-                <p>Here is your email to login :${email}.</p>
-                <p>password:${identityCardNumber}.</p>
+                <p>Here is your email to login: ${email}.</p>
+                <p>Password: ${identicalNumber}.</p>
                 <p>MyCrew Admin</p>
             `,
         };
-        // console.log(mailOptions)
-      
+
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err);
@@ -81,17 +102,12 @@ exports.register = async(req,res,next)=>{
             }
         });
 
-
-
-
-
-
-
-        res.json(`register successful ${newUser.firstName}`)
+        res.json(`Register successful for ${newUser.firstName}`);
     } catch (err) {
-        next(err)
+        next(err);
     }
-}
+};
+
 
 exports.allEmployees = async(req,res,next)=>{
     try {
@@ -511,4 +527,48 @@ exports.getHeader = async(req,res,next)=>{
         next(err)
     }
 }
+
+exports.getLeadSupId = async(req,res,next)=>{
+    try {
+
+        if(req.user.id === 1){
+            return createError(400,"Invalid")
+        }else{
+
+            const supId = await prisma.user.findFirst({
+                where:{
+                    id: req.user.supId
+                }
+            })
+            res.json(supId)
+        }
+    } catch (err) {
+        next(err)
+    }
+}
+
+exports.updateImageProfile = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        // Upload the image to Cloudinary
+        const upload = await cloudinary.uploader.upload(req.file.path);
+        const photo = upload.url;
+
+        // Update the user's profile image
+        const updateProfile = await prisma.user.update({
+            where: {
+                id: +id // Ensure the id is a number
+            },
+            data: {
+                profileImg: photo
+            }
+        });
+
+        res.json("Update User profile successfully");
+    } catch (err) {
+        next(err);
+    }
+};
+
 
