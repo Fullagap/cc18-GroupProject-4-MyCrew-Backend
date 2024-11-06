@@ -15,7 +15,8 @@ app.use(cors())
 
 
 readdirSync("./routes").map((file) => {
-  return app.use("/", require(`./routes/${file}`));
+    // console.log('here',file)
+    app.use("/", require(`./routes/${file}`));
   });
   
 
