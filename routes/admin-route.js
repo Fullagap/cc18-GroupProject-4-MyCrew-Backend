@@ -10,7 +10,7 @@ router.post("/admin/register",authCheck,adminCheck,registerValidator,register)
 router.patch("/admin/update-user/:id",authCheck,adminCheck,updateUser)
 router.post("/admin/register",authCheck,adminCheck,registerValidator,register)
 router.patch("/admin/update-user/:id",authCheck,adminCheck,updateUser)
-router.get("/admin/user/:id", authCheck, adminCheck, getUserById)
+router.get("/admin/user/:id", authCheck, getUserById) //เอา adminCheck ออก
 router.get("/admin/department",authCheck,adminCheck,getDepartment)
 router.get("/admin/All-employees",authCheck,adminCheck,allEmployees)
 router.get("/admin/department-position/:id",authCheck,adminCheck,getPositionEachDepartment)
