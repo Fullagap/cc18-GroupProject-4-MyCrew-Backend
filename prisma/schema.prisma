@@ -72,9 +72,14 @@ model User {
 model Attendance {
   id               Int       @id @default(autoincrement())
   userId           Int
-  date             DateTime  @db.Date()
+  year             Int
+  month            Int
+  date             Int
+  day              Int
+  dateTime         DateTime  @db.Date()
   checkInTime      DateTime
   checkOutTime     DateTime?
+  workingHour      Int?
   isWorkingDay     Boolean
   checkInLocation  String?
   checkOutLocation String?
@@ -106,6 +111,9 @@ model Payroll {
   paidDate     DateTime
   salary       Decimal
   compensation Decimal
+  tax          Decimal
+  providentFund Decimal @map("provident_fund")
+
 
   user User @relation(fields: [userId], references: [id])
 }
@@ -126,6 +134,7 @@ model RequestItem {
   id     Int @id @default(autoincrement())
   userId Int @map("user_id")
   itemId Int @map("item_id")
+  description String?
   status Status
 
   user User @relation(fields: [userId], references: [id])
@@ -162,11 +171,12 @@ model Category {
 // Session model
 model Session {
   id                  Int                  @id @default(autoincrement())
-  targetDate          DateTime
+  startedDate         DateTime
+  endDate             DateTime
   description         String?
   eventType           String               @map("event_type")
   createdAt           DateTime             @default(now()) @map("created_at")
-  attendanceLimit     Int                  @map("attandance_limit")
+  attendanceLimit     Int?                 @map("attandance_limit")
   createUserId        Int                  @map("create_user_id")
   user                User                 @relation(fields: [createUserId], references: [id])
   ActivityAttandances ActivityAttandance[]
