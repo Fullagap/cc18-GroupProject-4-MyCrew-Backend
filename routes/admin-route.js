@@ -20,6 +20,6 @@ router.post("/admin/create-department",authCheck,adminCheck, createDepartment)
 router.post("/admin/create-position",authCheck,adminCheck, createPosition)
 router.get("/admin/leader",authCheck,adminCheck, getHeader)
 router.get("/admin/supId",authCheck,getLeadSupId)
-router.patch("/admin/update-profile/:id",authCheck,upload.single("file"),updateImageProfile)
+router.patch("/admin/update-profile",authCheck,upload.single("file"),updateImageProfile)
 
 module.exports = router
