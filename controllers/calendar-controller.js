@@ -5,8 +5,8 @@ calendarController.getCalendar = async (req,res,next)=>{
     try{
         const data = await calendarService.getCalendar()
         res.json({ message: "Success", data })
-    }catch{
-        next()
+    }catch(err){
+        next(err)
     }
 }
 
@@ -14,8 +14,8 @@ calendarController.getLeaveRecord = async (req,res,next)=>{
     try{
         const data = await calendarService.getLeaveRecord()
         res.json({ message: "Success LeaveRecord ", data })
-    }catch{
-        next()
+    }catch(err){
+        next(err)
     }
 }
 
@@ -24,8 +24,8 @@ calendarController.getLeaveRecordById = async (req,res,next)=>{
         const { userId } = req.params;
         const data = await calendarService.getLeaveRecordById(userId)
         res.json({ message: "Success", data })
-    }catch{
-        next()
+    }catch(err){
+        next(err)
     }
 }     
 
@@ -33,21 +33,19 @@ calendarController.getSession = async (req,res,next)=>{
     try{
         const data = await calendarService.getSession()
         res.json({ message: "Success getSession", data })
-    }catch{
-        next()
+    }catch(err){
+        next(err)
     }
 }
 
 calendarController.addSession = async (req,res,next)=>{
     try{
-        // const createUserId = req.user.id // ต้องลอง Log ดูอีกที
-        // const attendanceLimit = 0
-        const {createUserId, targetDate, description,eventType,attendanceLimit } = req.body
-        console.log('req.body addSession', req.body)
-        await calendarService.addSession(createUserId,attendanceLimit,eventType,targetDate,description)
+        const {createUserId, startedDate,endDate,description,eventType,attendanceLimit} = req.body
+        console.log("addSession",req.body)
+        await calendarService.addSession(createUserId, startedDate,endDate,description,eventType,attendanceLimit)
         res.json({ message: "Add Session Success" })
-    }catch{
-        next()
+    }catch(err){
+        next(err)
     }
 }
 
@@ -55,20 +53,12 @@ calendarController.updateSession = async (req, res, next) => {
     try {
     //   const createUserId = req.user?.id; // ใช้ req.user.id ถ้ามีการยืนยันตัวตน
       const { sessionId } = req.params;
-      const attendanceLimit = 0;
-      const { createUserId, targetDate, description, eventType } = req.body;
+      const { createUserId,startedDate,endDate,description,eventType,attendanceLimit } = req.body;
   
-      await calendarService.updateSession(
-        sessionId,  
-        createUserId,
-        eventType,
-        targetDate,
-        description,
-        attendanceLimit
-      );
+      await calendarService.updateSession(sessionId,createUserId,startedDate,endDate,description,eventType,attendanceLimit);
         res.json({ message: "Update Session Success" })
-    }catch{
-        next()
+    }catch(err){
+        next(err)
     }
 }
 
@@ -77,9 +67,11 @@ calendarController.deleteSession = async (req,res,next)=>{
         const { sessionId } = req.params
         await calendarService.deleteSession(sessionId)
         res.json({ message: "Delete Session Success"})
-    }catch{
-        next()
+    }catch(err){
+        next(err)
     }
 }
+
+
 
 module.exports = calendarController

@@ -16,46 +16,32 @@ calendarService.getSession = async () =>
   await prisma.session.findMany();
 
 calendarService.addSession = async (
-  createUserId,
-  attendanceLimit,
-  eventType,
-  targetDate,
-  description
-) => {
-  console.log('prisma', createUserId,
-    attendanceLimit,
-    eventType,
-    targetDate,
-    description)
-  return await prisma.session.create({
+  createUserId, startedDate,endDate,description,eventType,attendanceLimit
+) => 
+  await prisma.session.create({
     data: {
       createUserId: parseInt(createUserId),
-      attendanceLimit: parseInt(attendanceLimit),
-      eventType,
-      targetDate: new Date(targetDate),
+      startedDate: new Date(startedDate),
+      endDate: new Date(endDate),
       description,
+      eventType,
+      attendanceLimit: !isNaN(attendanceLimit) ? parseInt(attendanceLimit) : null,
     },
   });
-};
 
-calendarService.updateSession = async (
-  sessionId,       
-  createUserId,
-  eventType,
-  targetDate,
-  description,
-  attendanceLimit
-) =>
+
+calendarService.updateSession = async (sessionId,createUserId,startedDate,endDate,description,eventType,attendanceLimit) =>
   await prisma.session.update({
     where: {
       id: parseInt(sessionId)
     },
     data: {
       createUserId: parseInt(createUserId),
-      eventType,
-      targetDate: new Date(targetDate),
+      startedDate: new Date(startedDate),
+      endDate: new Date(endDate),
       description,
-      attendanceLimit: parseInt(attendanceLimit),
+      eventType,
+      attendanceLimit: !isNaN(attendanceLimit) ? parseInt(attendanceLimit) : null,
     },
   });
 
