@@ -5,13 +5,21 @@ const prisma = require("../config/prisma");
 
 module.exports.clockIn = async (req, res, next) => {
   try {
-    const { latitude, longitude} = req.body;
+    const { latitude, longitude,location} = req.body;
+
+    // get location to compare
+
+    const locationData = await prisma.site.findFirst({
+      where:{
+        id:location
+      }
+    })
 
     // Mock-up office location (for testing)
     const officeLocation = {
-      latitude: 13.758, // Example: Wannasorn building
-      longitude: 100.535,
-      radius: 10000, // meters
+      latitude: locationData.latitude, // Example: Wannasorn building
+      longitude: locationData.longitude,
+      radius: locationData.area, // meters
     };
 
     // Calculate distance (simplified for testing)
@@ -83,7 +91,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 module.exports.clockOut = async (req, res, next) => {
   try {
-    const { latitude, longitude } = req.body;
+    const { latitude, longitude,location } = req.body;
     const userId = 5; // Test user ID
     const currentDate = new Date();
 
