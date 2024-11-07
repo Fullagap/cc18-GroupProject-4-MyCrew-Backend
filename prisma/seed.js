@@ -224,16 +224,18 @@ const attandanceData = [
 function createAttandanceSeed()
 {
   let arr = []
-  for (let i = 1; i <20; i++) {
+  for (let i = 10; i <28; i++) {
+    
     const year = 2024;
     const month = 10;
-    const date = 2+i;
-    const mockDate = new Date(year,month,date);
+    const date = i;
+    console.log(`${year}-${month}-${date}`)
+    const mockDate = new Date(`${year}-${month}-${date}`);
     arr.push({
       id: i,
       userId: 1,
       year:mockDate.getFullYear(),
-      month:mockDate.getMonth(),
+      month:mockDate.getMonth()+1,
       date:mockDate.getDate(),
       day: mockDate.getDay(),
       dateTime: mockDate,

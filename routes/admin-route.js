@@ -1,15 +1,35 @@
-const express = require("express")
-const router = express.Router()
-const { register, updateUser, getUserById, getDepartment, getPositionEachDepartment, getEmployeeInDepartment
-    , getEachSuperId, getLeaderEachSupId, getSupIdByDepartment, allEmployees, createDepartment, createPosition,getHeader,getLeadSupId,updateImageProfile,createOfficeSiteLocation } = require("../controllers/admin-controller")
-const { authCheck, adminCheck } = require("../middlewares/authen")
-const {registerValidator} = require("../middlewares/validator")
-const upload = require("../middlewares/upload")
+const express = require("express");
+const router = express.Router();
+const {
+  register,
+  updateUser,
+  getUserById,
+  getDepartment,
+  getPositionEachDepartment,
+  getEmployeeInDepartment,
+  getEachSuperId,
+  getLeaderEachSupId,
+  getSupIdByDepartment,
+  allEmployees,
+  createDepartment,
+  createPosition,
+  getHeader,
+  getLeadSupId,
+  updateImageProfile,
+} = require("../controllers/admin-controller");
+const {
+  createOfficeSiteLocation,
+} = require("../controllers/admin-location-controller");
+const { authCheck, adminCheck } = require("../middlewares/authen");
 
 router.patch("/admin/update-user/:id",authCheck,adminCheck,updateUser)
 router.post("/admin/register",authCheck,adminCheck,registerValidator,register)
+<<<<<<< HEAD
 router.patch("/admin/update-user/:id",authCheck,adminCheck,updateUser)
 router.get("/admin/user/:id", authCheck, getUserById) //เอา adminCheck ออก
+=======
+router.get("/admin/user/:id", authCheck, adminCheck, getUserById)
+>>>>>>> dev
 router.get("/admin/department",authCheck,adminCheck,getDepartment)
 router.get("/admin/All-employees",authCheck,adminCheck,allEmployees)
 router.get("/admin/department-position/:id",authCheck,adminCheck,getPositionEachDepartment)
@@ -23,4 +43,8 @@ router.get("/admin/leader", getHeader)
 router.get("/admin/supId",authCheck,getLeadSupId)
 router.patch("/admin/update-profile",authCheck,upload.single("file"),updateImageProfile)
 
+<<<<<<< HEAD
 module.exports = router
+=======
+module.exports = router;
+>>>>>>> dev
