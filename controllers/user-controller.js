@@ -1,6 +1,7 @@
 const { getRecordByUserId } = require("../repository/leaverecord-repo")
 const { getUserById } = require("../repository/user-repo")
 const createError = require("../utils/createError")
+const prisma = require("../config/prisma");
 
 exports.GetUser = async (req,res,next)=>{
     try {
@@ -67,5 +68,15 @@ exports.GetLeaveRecord = async (req,res,next)=>{
         res.status(200).json(rec)
     } catch (error) {
        next(error) 
+    }
+}
+
+exports.getSiteLocationData = async (req,res,next) =>{
+    try{
+        const siteLocation = await prisma.site.findMany()
+        res.status(201).json(siteLocation)
+
+    }catch(err){
+        next(err)
     }
 }

@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { PrismaClient } = require("@prisma/client");
+const { date } = require("joi");
 const prisma = new PrismaClient();
 const hashedPassword = bcrypt.hashSync("123456", 10);
 
@@ -172,7 +173,7 @@ const positionData = [
 const leaveCategoryData = [
   { id: 1, leaveName: "annualLeave" },
   { id: 2, leaveName: "sickLeave" },
-  { id: 3, leaveName: "WOPay" },
+  { id: 3, leaveName: "personalLeave" },
 ];
 const leaveRecordData = [
   {
@@ -198,7 +199,11 @@ const attandanceData = [
   {
     id: 1,
     userId: 2,
-    date: new Date(2021, 12, 15),
+    year:2021,
+    month:12,
+    date:15,
+    day: 3,
+    dateTime: new Date(2021, 12, 15),
     checkInTime: new Date(),
     checkOutTime: new Date(),
     isWorkingDay: true,
@@ -206,35 +211,72 @@ const attandanceData = [
   {
     id: 2,
     userId: 2,
-    date: new Date(2021, 12, 16),
+    year:2021,
+    month:12,
+    date:16,
+    day: 4,
+    dateTime: new Date(2021, 12, 16),
     checkInTime: new Date(),
     checkOutTime: new Date(),
     isWorkingDay: true,
   },
 ];
+function createAttandanceSeed()
+{
+  let arr = []
+  for (let i = 10; i <28; i++) {
+    
+    const year = 2024;
+    const month = 10;
+    const date = i;
+    console.log(`${year}-${month}-${date}`)
+    const mockDate = new Date(`${year}-${month}-${date}`);
+    arr.push({
+      id: i,
+      userId: 1,
+      year:mockDate.getFullYear(),
+      month:mockDate.getMonth()+1,
+      date:mockDate.getDate(),
+      day: mockDate.getDay(),
+      dateTime: mockDate,
+      checkInTime: mockDate,
+      checkOutTime: mockDate,
+      isWorkingDay: !(mockDate.getDay()===6)?!(mockDate.getDay()===0)?true:false:false,
+    })
+  }
+  return arr
+}
 const payrollData = [
   {
     id: 1,
     userId: 1,
     paidAmount: 20000,
     paidDate: new Date(2021, 12, 16),
+    year: 2021,
+    month:11,
     salary: 20000,
     compensation: 0,
+    tax:0,
+    providentFund:0,
   },
   {
     id: 2,
     userId: 2,
     paidAmount: 20000,
     paidDate: new Date(2021, 12, 16),
+    year:2021,
+    month:12,
     salary: 20000,
     compensation: 0,
+    tax:0,
+    providentFund:0,
   },
 ];
 const sessionData = [
   {
     id: 1,
-    targetDate: new Date(2021, 12, 15),
-    description: "training session",
+    startedDate: new Date(2021, 12, 15),
+    endDate: new Date(2021, 12, 15),
     eventType: "HR",
     createdAt: new Date(),
     attendanceLimit: 50,
@@ -270,7 +312,7 @@ async function run() {
   await prisma.user.createMany({ data: userData });
   await prisma.leaveCategory.createMany({ data: leaveCategoryData });
   await prisma.leaveRecord.createMany({ data: leaveRecordData });
-  await prisma.attendance.createMany({ data: attandanceData });
+  await prisma.attendance.createMany({ data: createAttandanceSeed() });
   await prisma.payroll.createMany({ data: payrollData });
   await prisma.session.createMany({ data: sessionData });
   await prisma.activityAttandance.createMany({ data: activityAttandanceData });
