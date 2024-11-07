@@ -8,6 +8,7 @@ router.get("/calendar/leaveRecord/:userId", calendarController.getLeaveRecordByI
 
 router.get("/calendar/session",calendarController.getSession); // ดู session ทั้งหมด
 router.get("/calendar/session/getHoliday", calendarController.getHoliday); // getHoliday
+router.post("/calendar/publicHoliday", calendarController.publicHoliday ); // เอาข้อมูล getHoliday ไปยัดใน publicHoliday
 
 router.post("/calendar/session/addSession", calendarController.addSession); // เพิ่ม memo 
 router.patch("/calendar/session/updateSession/:sessionId", calendarController.updateSession); // เพิ่ม memo 
@@ -16,6 +17,7 @@ router.delete("/calendar/deleteSession/:sessionId", calendarController.deleteSes
 router.post("/calendar/leaveRequest/addLeaveRequest", calendarController.addLeaveRequest); // ลบ memo 
 
 router.get("/calendar/missingAttendance/:userId", calendarController.getMissingAttendance ); // หาวันขาด
+
  
 // router.get("/calendar/memo/:date", calendarController.getHoliday);   // ดู memo ในวันที่เลือก
 // router.post("/calendar/memo", calendarController.addHoliday);        // เพิ่ม memo 

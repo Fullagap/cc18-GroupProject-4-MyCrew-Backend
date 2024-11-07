@@ -6,9 +6,18 @@ calendarService.getCalendar = async () => await prisma.calendar.findMany();
 calendarService.getLeaveRecord = async () =>
   await prisma.leaveRecord.findMany();
 
-calendarService.addLeaveRequest = async (userId,requestDate,startDate,endDate,leaveTypeId,supId,status,description) =>
+calendarService.addLeaveRequest = async (
+  userId,
+  requestDate,
+  startDate,
+  endDate,
+  leaveTypeId,
+  supId,
+  status,
+  description
+) =>
   await prisma.leaveRecord.create({
-    data:{
+    data: {
       userId: parseInt(userId),
       requestDate: new Date(requestDate),
       startDate: new Date(startDate),
@@ -18,7 +27,7 @@ calendarService.addLeaveRequest = async (userId,requestDate,startDate,endDate,le
       status,
       description,
       // leaveCategoryId: parseInt(leaveTypeId)
-    }
+    },
   });
 
 calendarService.getLeaveRecordById = async (userId) =>
@@ -26,26 +35,29 @@ calendarService.getLeaveRecordById = async (userId) =>
     where: { userId: parseInt(userId) },
     include: { leaveCategory: true }, // ดึงข้อมูล leaveCategory มาด้วย
   });
-  
-  calendarService.getSession = async () =>
-    await prisma.session.findMany();
-  
-  calendarService.getHoliday = async () =>
-    await prisma.session.findMany({
-      where:{
-        eventType: "HOLIDAY"
-      },
-      select: {
-        id: true,
-        startedDate: true,
-        description: true,
-      }
-    });
 
+calendarService.getSession = async () => await prisma.session.findMany();
+
+calendarService.getHoliday = async () =>
+  await prisma.session.findMany({
+    where: {
+      eventType: "HOLIDAY",
+    },
+    select: {
+      id: true,
+      startedDate: true,
+      description: true,
+    },
+  });
 
 calendarService.addSession = async (
-  createUserId, startedDate,endDate,description,eventType,attendanceLimit
-) => 
+  createUserId,
+  startedDate,
+  endDate,
+  description,
+  eventType,
+  attendanceLimit
+) =>
   await prisma.session.create({
     data: {
       createUserId: parseInt(createUserId),
@@ -53,15 +65,24 @@ calendarService.addSession = async (
       endDate: new Date(endDate),
       description,
       eventType,
-      attendanceLimit: !isNaN(attendanceLimit) ? parseInt(attendanceLimit) : null,
+      attendanceLimit: !isNaN(attendanceLimit)
+        ? parseInt(attendanceLimit)
+        : null,
     },
   });
 
-
-calendarService.updateSession = async (sessionId,createUserId,startedDate,endDate,description,eventType,attendanceLimit) =>
+calendarService.updateSession = async (
+  sessionId,
+  createUserId,
+  startedDate,
+  endDate,
+  description,
+  eventType,
+  attendanceLimit
+) =>
   await prisma.session.update({
     where: {
-      id: parseInt(sessionId)
+      id: parseInt(sessionId),
     },
     data: {
       createUserId: parseInt(createUserId),
@@ -69,7 +90,9 @@ calendarService.updateSession = async (sessionId,createUserId,startedDate,endDat
       endDate: new Date(endDate),
       description,
       eventType,
-      attendanceLimit: !isNaN(attendanceLimit) ? parseInt(attendanceLimit) : null,
+      attendanceLimit: !isNaN(attendanceLimit)
+        ? parseInt(attendanceLimit)
+        : null,
     },
   });
 
@@ -83,14 +106,25 @@ calendarService.deleteSession = async (sessionId) =>
 calendarService.getMissingAttendance = async (userId) =>
   await prisma.attendance.findMany({
     where: {
-      userId: parseInt(userId),  // กำหนด User ที่ต้องการหา
-      checkInTime: { not: { gte: new Date("1900-01-01T00:00:00.000Z") } },    // เช็คว่าไม่มีการเช็คอิน
-      isWorkingDay: true       // เช็คว่าเป็นวันทำงาน
+      userId: parseInt(userId), // กำหนด User ที่ต้องการหา
+      checkInTime: { not: { gte: new Date("1900-01-01T00:00:00.000Z") } }, // เช็คว่าไม่มีการเช็คอิน
+      isWorkingDay: true, // เช็คว่าเป็นวันทำงาน
     },
     select: {
-      date: true,              // หาวันที่ขาดงาน
-      day: true,               // วันในสัปดาห์
-    }
+      date: true, // หาวันที่ขาดงาน
+      day: true, // วันในสัปดาห์
+    },
+  });
+
+calendarService.publicHoliday = async (description, date, month, year, dateTime) =>
+  await prisma.publicHoliday.create({
+    data: {
+      description,
+      date: parseInt(date),
+      month: parseInt(month),
+      year: parseInt(year),
+      dateTime,
+    },
   });
 
 module.exports = calendarService;

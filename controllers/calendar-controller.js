@@ -21,8 +21,26 @@ calendarController.getLeaveRecord = async (req, res, next) => {
 
 calendarController.addLeaveRequest = async (req, res, next) => {
   try {
-    const {userId,requestDate,startDate,endDate,leaveTypeId,supId,status,description} = req.body;
-    await calendarService.addLeaveRequest(userId,requestDate,startDate,endDate,leaveTypeId,supId,status,description);
+    const {
+      userId,
+      requestDate,
+      startDate,
+      endDate,
+      leaveTypeId,
+      supId,
+      status,
+      description,
+    } = req.body;
+    await calendarService.addLeaveRequest(
+      userId,
+      requestDate,
+      startDate,
+      endDate,
+      leaveTypeId,
+      supId,
+      status,
+      description
+    );
     res.json({ message: "Success" });
   } catch (err) {
     next(err);
@@ -49,13 +67,13 @@ calendarController.getSession = async (req, res, next) => {
 };
 
 calendarController.getHoliday = async (req, res, next) => {
-    try {
-      const data = await calendarService.getHoliday();
-      res.json({ message: "Success getHoliday", data });
-    } catch (err) {
-      next(err);
-    }
-  };
+  try {
+    const data = await calendarService.getHoliday();
+    res.json({ message: "Success getHoliday", data });
+  } catch (err) {
+    next(err);
+  }
+};
 
 calendarController.addSession = async (req, res, next) => {
   try {
@@ -67,7 +85,7 @@ calendarController.addSession = async (req, res, next) => {
       eventType,
       attendanceLimit,
     } = req.body;
-    console.log("addSession", req.body);
+    
     await calendarService.addSession(
       createUserId,
       startedDate,
@@ -124,8 +142,18 @@ calendarController.getMissingAttendance = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const data = await calendarService.getMissingAttendance(userId);
-    console.log('data', data)
-    res.json({ message: "get MissingAttendance Success",data });
+    res.json({ message: "get MissingAttendance Success", data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.publicHoliday = async (req, res, next) => {
+  try {
+    const { description, date, month, year, dateTime } = req.body;
+    // console.log('req.body', req.body)
+    await calendarService.publicHoliday(description, date, month, year, dateTime);
+    res.json({ message: "get publicHoliday Success" });
   } catch (err) {
     next(err);
   }
