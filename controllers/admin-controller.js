@@ -196,36 +196,36 @@ exports.getUserById = async (req, res, next) => {
     try {
         const { id } = req.params
 
-    const user = await prisma.user.findFirst({
-      where: { id: +id },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        phoneNumber: true,
-        supId: true,
-        departmentId: true,
-        positionId: true,
-        role: true,
-        bookBank: true,
-        salary: true,
-        annualLeaveAmount: true,
-        sickLeaveAmount: true,
-        WOPayAmount: true,
-        position: {
-          select: { positionName: true },
-        },
-        Department: {
-          select: { departmentName: true },
-        },
-      },
-    });
-    res.json(user);
-  } catch (err) {
-    next(err);
-  }
-};
+        const user = await prisma.user.findFirst({
+            where: { id: +id },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                phoneNumber: true,
+                supId: true,
+                departmentId: true,
+                positionId: true,
+                role: true,
+                bookBank: true,
+                salary: true,
+                annualLeaveAmount: true,
+                sickLeaveAmount: true,
+                personalLeaveAmount: true,
+                position: {
+                    select: { positionName: true }
+                },
+                Department: {
+                    select: { departmentName: true }
+                }
+            }
+        })
+        res.json(user)
+    } catch (err) {
+        next(err)
+    }
+}
 
 exports.getDepartment = async (req, res, next) => {
     try {
