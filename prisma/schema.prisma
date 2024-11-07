@@ -193,7 +193,7 @@ model ActivityAttandance {
 }
 
 // Calendar model
-model Calendar {
+model PublicHoliday {
   id          Int      @id @default(autoincrement())
   date        Int
   month       Int
@@ -202,6 +202,8 @@ model Calendar {
   description String
   eventType   String   @map("event_type")
   createdAt   DateTime @map("created_at")
+
+  @@map("public_holiday")
 }
 
 // LeaveRecord model
