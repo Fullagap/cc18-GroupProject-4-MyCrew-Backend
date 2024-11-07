@@ -173,7 +173,7 @@ const positionData = [
 const leaveCategoryData = [
   { id: 1, leaveName: "annualLeave" },
   { id: 2, leaveName: "sickLeave" },
-  { id: 3, leaveName: "WOPay" },
+  { id: 3, leaveName: "personalLeave" },
 ];
 const leaveRecordData = [
   {
@@ -252,6 +252,8 @@ const payrollData = [
     userId: 1,
     paidAmount: 20000,
     paidDate: new Date(2021, 12, 16),
+    year: 2021,
+    month:11,
     salary: 20000,
     compensation: 0,
     tax:0,
@@ -262,6 +264,8 @@ const payrollData = [
     userId: 2,
     paidAmount: 20000,
     paidDate: new Date(2021, 12, 16),
+    year:2021,
+    month:12,
     salary: 20000,
     compensation: 0,
     tax:0,
