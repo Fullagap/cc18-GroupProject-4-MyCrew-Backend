@@ -195,7 +195,10 @@ model ActivityAttandance {
 // Calendar model
 model Calendar {
   id          Int      @id @default(autoincrement())
-  date        DateTime
+  date        Int
+  month       Int
+  year        Int
+  dateTime    DateTime
   description String
   eventType   String   @map("event_type")
   createdAt   DateTime @map("created_at")
@@ -209,7 +212,7 @@ model LeaveRecord {
   startDate   DateTime  @map("start_date") @db.Date()
   endDate     DateTime  @map("end_date") @db.Date()
   leaveTypeId Int       @map("leave_type_id")
-  supId       Int       @map("sup_id")
+  supId       Int?       @map("sup_id")
   status      Status
   description String?
   comment     String?
