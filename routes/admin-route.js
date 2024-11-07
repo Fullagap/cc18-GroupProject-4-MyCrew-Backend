@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../middlewares/upload")
+const { registerValidator } = require("../middlewares/validator");
 const {
   register,
   updateUser,
@@ -16,11 +18,11 @@ const {
   getHeader,
   getLeadSupId,
   updateImageProfile,
+  
 } = require("../controllers/admin-controller");
-const {
-  createOfficeSiteLocation,
-} = require("../controllers/admin-location-controller");
+
 const { authCheck, adminCheck } = require("../middlewares/authen");
+
 
 router.patch("/admin/update-user/:id",authCheck,adminCheck,updateUser)
 router.post("/admin/register",authCheck,adminCheck,registerValidator,register)
