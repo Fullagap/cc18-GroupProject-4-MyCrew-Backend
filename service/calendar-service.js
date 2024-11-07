@@ -26,9 +26,21 @@ calendarService.getLeaveRecordById = async (userId) =>
     where: { userId: parseInt(userId) },
     include: { leaveCategory: true }, // ดึงข้อมูล leaveCategory มาด้วย
   });
-
-calendarService.getSession = async () =>
-  await prisma.session.findMany();
+  
+  calendarService.getSession = async () =>
+    await prisma.session.findMany();
+  
+  calendarService.getHoliday = async () =>
+    await prisma.session.findMany({
+      where:{
+        eventType: "HOLIDAY"
+      },
+      select: {
+        id: true,
+        startedDate: true,
+        description: true,
+      }
+    });
 
 
 calendarService.addSession = async (
@@ -66,6 +78,19 @@ calendarService.deleteSession = async (sessionId) =>
     where: {
       id: parseInt(sessionId),
     },
+  });
+
+calendarService.getMissingAttendance = async (userId) =>
+  await prisma.attendance.findMany({
+    where: {
+      userId: parseInt(userId),  // กำหนด User ที่ต้องการหา
+      checkInTime: { not: { gte: new Date("1900-01-01T00:00:00.000Z") } },    // เช็คว่าไม่มีการเช็คอิน
+      isWorkingDay: true       // เช็คว่าเป็นวันทำงาน
+    },
+    select: {
+      date: true,              // หาวันที่ขาดงาน
+      day: true,               // วันในสัปดาห์
+    }
   });
 
 module.exports = calendarService;

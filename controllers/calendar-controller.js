@@ -48,6 +48,15 @@ calendarController.getSession = async (req, res, next) => {
   }
 };
 
+calendarController.getHoliday = async (req, res, next) => {
+    try {
+      const data = await calendarService.getHoliday();
+      res.json({ message: "Success getHoliday", data });
+    } catch (err) {
+      next(err);
+    }
+  };
+
 calendarController.addSession = async (req, res, next) => {
   try {
     const {
@@ -106,6 +115,17 @@ calendarController.deleteSession = async (req, res, next) => {
     const { sessionId } = req.params;
     await calendarService.deleteSession(sessionId);
     res.json({ message: "Delete Session Success" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.getMissingAttendance = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const data = await calendarService.getMissingAttendance(userId);
+    console.log('data', data)
+    res.json({ message: "get MissingAttendance Success",data });
   } catch (err) {
     next(err);
   }
