@@ -123,13 +123,14 @@ exports.checkRequestItem = async (req,res,next) => {
 
 exports.createRequestItem = async (req, res, next) => {
     try {
-        const { itemId, userId } = req.body;
+        const { itemId, userId, description } = req.body;
 
         const item = await prisma.requestItem.create({
             data: {
                 itemId: itemId,
                 userId: userId,
                 status: "REJECT",
+                description: description,
             },
         });
 
@@ -177,6 +178,32 @@ exports.checkSup = async (req, res, next) => {
       console.log(filteredRequests);
   
       res.status(200).json(filteredRequests);
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+exports.checkUserRequestItem = async (req, res, next) => {
+    const { user_id } = req.params;
+  
+    if (!user_id) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+  
+    try {
+      const requests = await prisma.requestItem.findMany({
+        where: {
+          userId: Number(user_id)
+        },
+        include: {
+          user: true,
+          item: true
+        },
+      });
+  
+      console.log(requests);
+  
+      res.status(200).json(requests);
     } catch (error) {
       next(error);
     }
