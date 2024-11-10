@@ -1,6 +1,6 @@
 const express = require("express");
-const router = express.Router();
 const upload = require("../middlewares/upload")
+const router = express.Router();
 const { registerValidator } = require("../middlewares/validator");
 const {
   register,
