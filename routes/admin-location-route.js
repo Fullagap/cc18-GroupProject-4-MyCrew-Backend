@@ -3,6 +3,6 @@ const router = express.Router();
 const {  createOfficeSiteLocation} = require("../controllers/admin-location-controller");
 const { authCheck, adminCheck } = require("../middlewares/authen");
 
-router.post("/admin/site-register",createOfficeSiteLocation);
+router.post("/admin/site-register",authCheck,adminCheck,createOfficeSiteLocation);
 
 module.exports = router;

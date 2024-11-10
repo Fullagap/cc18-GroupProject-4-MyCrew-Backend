@@ -30,7 +30,6 @@ exports.authCheck = async (req,res,next) => {
 
         const {password ,identicalNumber,dateStart , dateEnd, ...useData} = foundUser
         req.user = useData
-
         next()
   } catch (err) {
       next(err)
