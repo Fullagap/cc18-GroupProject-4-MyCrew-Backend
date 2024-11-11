@@ -186,3 +186,13 @@ module.exports.clockOut = async (req, res, next) => {
     next(createError("Failed to clock out", 500));
   }
 };
+
+module.exports.CheckIsSup = async (req, res, next) => {
+  try {
+    console.log(req.user.id)
+    const supData = await prisma.user.findFirst({ where: { supId: req.user.id } });
+    res.status(201).json(supData);
+  } catch (err) {
+    next(err);
+  }
+};

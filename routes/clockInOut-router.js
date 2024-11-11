@@ -7,6 +7,6 @@ const { authCheck} = require("../middlewares/authen");
 router.post('/clock-in',authCheck,clockInOutController.clockIn);
 router.post('/clock-out',authCheck, clockInOutController.clockOut);
 router.get('/get-attendance-data',authCheck,clockInOutController.getAttendanceData)
-
+router.get('/user/checkissup',authCheck,clockInOutController.CheckIsSup)
 
 module.exports = router;
