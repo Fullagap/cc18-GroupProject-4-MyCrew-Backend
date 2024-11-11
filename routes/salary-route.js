@@ -3,5 +3,6 @@ const { calculateSalary} = require("../controllers/salary-controller")
 const router = express.Router()
 
 router.get("/salary", calculateSalary)
+// router.get("/salary/get-leaverecord",getLeaveRecord)
 
 module.exports = router
