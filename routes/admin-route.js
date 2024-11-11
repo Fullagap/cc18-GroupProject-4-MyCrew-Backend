@@ -1,5 +1,4 @@
 const express = require("express");
-const upload = require("../middlewares/upload")
 const router = express.Router();
 const { registerValidator } = require("../middlewares/validator");
 const {
@@ -18,10 +17,13 @@ const {
   getHeader,
   getLeadSupId,
   updateImageProfile,
+  currentUser,
+  currentAdmin
   
 } = require("../controllers/admin-controller");
 
 const { authCheck, adminCheck } = require("../middlewares/authen");
+const upload = require("../middlewares/upload")
 
 
 router.patch("/admin/update-user/:id",authCheck,adminCheck,updateUser)
@@ -39,5 +41,7 @@ router.post("/admin/create-position", createPosition)
 router.get("/admin/leader", getHeader)
 router.get("/admin/supId",authCheck,getLeadSupId)
 router.patch("/admin/update-profile",authCheck,upload.single("file"),updateImageProfile)
+router.get("/admin/current-user",authCheck,currentUser)
+router.get("/admin/current-admin",authCheck,adminCheck,currentAdmin)
 
 module.exports = router;

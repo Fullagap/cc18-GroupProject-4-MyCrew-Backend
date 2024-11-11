@@ -184,6 +184,7 @@ const leaveRecordData = [
     leaveTypeId: 1,
     supId: 1,
     status: "APPROVE",
+    isPaid : true
   },
   {
     id: 2,
@@ -193,6 +194,7 @@ const leaveRecordData = [
     leaveTypeId: 2,
     supId: 1,
     status: "WAITING",
+    isPaid: false
   },
 ];
 const attandanceData = [
@@ -250,7 +252,6 @@ const payrollData = [
   {
     id: 1,
     userId: 1,
-    paidAmount: 20000,
     paidDate: new Date(2021, 12, 16),
     year: 2021,
     month:11,
@@ -258,11 +259,15 @@ const payrollData = [
     compensation: 0,
     tax:0,
     providentFund:0,
+    netIncome : 0,
+    income :0,
+    socialSecurityFund:0,
+    extra:0,
+    incomePerDay : 20
   },
   {
     id: 2,
     userId: 2,
-    paidAmount: 20000,
     paidDate: new Date(2021, 12, 16),
     year:2021,
     month:12,
@@ -270,6 +275,11 @@ const payrollData = [
     compensation: 0,
     tax:0,
     providentFund:0,
+    netIncome : 0,
+    income :0,
+    socialSecurityFund:0,
+    extra:0,
+    incomePerDay : 20
   },
 ];
 const sessionData = [
