@@ -1,7 +1,7 @@
 const express = require("express")
 const {checkRequest,changeStatus,changeComment,checkItem,
     createItem,updateItem,checkRequestItem,createRequestItem,
-    changeStatusRequestItem,checkSup,checkUserRequestItem,checkCategory} = require("../controllers/checkRequest-controller")
+    changeStatusRequestItem,checkSup,checkUserRequestItem,checkCategory,editIsHide} = require("../controllers/checkRequest-controller")
 const router = express.Router()
 
 
@@ -11,6 +11,7 @@ router.patch("/changeComment/:id",changeComment )
 
 router.get("/checkItem",checkItem)
 router.get("/checkCategory",checkCategory)
+router.post("/editIsHide/:id",editIsHide)
 router.post("/createItem",createItem)
 router.patch("/updateItem/:id",updateItem)
 
