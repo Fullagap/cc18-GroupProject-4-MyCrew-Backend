@@ -64,6 +64,9 @@ exports.changeComment = async (req,res,next) => {
 exports.checkItem = async (req,res,next) => {
     try {
         const user = await prisma.Item.findMany({
+            include: {
+                category: true
+            }
         })
         res.status(200).json(user)
     } catch (error) {
@@ -75,19 +78,35 @@ exports.createItem = async (req, res, next) => {
     try {
         const { name, cost, categoryId } = req.body;
 
+        // ตรวจสอบว่าค่า cost และ categoryId เป็นตัวเลข
+        if (isNaN(Number(cost)) || isNaN(Number(categoryId))) {
+            return res.status(400).json({ error: 'Cost and CategoryId must be valid numbers' });
+        }
+
         const item = await prisma.item.create({
             data: {
                 itemName: name,  
-                cost: cost,
-                categoryId: categoryId,
+                cost: Number(cost),
+                categoryId: Number(categoryId),
             },
         });
 
         res.status(201).json(item); 
     } catch (error) {
-        next(error)
+        next(error);
     }
 };
+
+
+exports.checkCategory = async (req,res,next) => {
+    try {
+        const user = await prisma.Category.findMany({
+        })
+        res.status(200).json(user)
+    } catch (error) {
+        next(error)
+    }
+}
 
 exports.updateItem = async (req, res, next) => {
     try {
@@ -127,9 +146,9 @@ exports.createRequestItem = async (req, res, next) => {
 
         const item = await prisma.requestItem.create({
             data: {
-                itemId: itemId,
-                userId: userId,
-                status: "REJECT",
+                itemId: Number(itemId),
+                userId: Number(userId),
+                status: "WAITING",
                 description: description,
             },
         });
