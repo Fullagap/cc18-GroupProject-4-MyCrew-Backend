@@ -24,7 +24,8 @@ exports.register = async (req, res, next) => {
             annualLeaveAmount,
             sickLeaveAmount,
             personalLeaveAmount,
-            supId
+            supId,
+            address
         } = req.body;
 
         // Validate dateStart
@@ -61,6 +62,7 @@ exports.register = async (req, res, next) => {
                 identicalNumber,
                 email,
                 phoneNumber,
+                address: address,
                 password: hashPassword,
                 departmentId: +departmentId,
                 positionId: +positionId,
@@ -132,7 +134,7 @@ exports.allEmployees = async (req, res, next) => {
             }
         })
 
-        const employeesDetail = employees.map(({ password, dateEnd, profileImg, ...userData }) => userData);
+        const employeesDetail = employees.map(({ password, dateEnd, ...userData }) => userData);
         res.json(employeesDetail)
     } catch (err) {
         next(err)
