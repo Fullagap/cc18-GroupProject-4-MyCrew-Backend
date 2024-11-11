@@ -71,7 +71,9 @@ exports.register = async (req, res, next) => {
                 sickLeaveAmount: +sickLeaveAmount,
                 personalLeaveAmount: +personalLeaveAmount,
                 supId: +supId,
-                annualLeave: +annualLeaveAmount
+                annualLeave: +annualLeaveAmount,
+                sickLeave:+sickLeaveAmount,
+                personalLeave:+personalLeaveAmount
             }
         });
 
@@ -159,10 +161,9 @@ exports.updateUser = async (req, res, next) => {
         }
 
         if (req.body.sickLeaveAmount) {
-            const sickLeaveAmount = parseInt(req.body.sickLeaveAmount, 10); // Fix here: change WOPayAmount to sickLeaveAmount
+            const sickLeaveAmount = parseInt(req.body.sickLeaveAmount, 10); 
             if (!isNaN(sickLeaveAmount)) {
-                updateData.sickLeaveAmount = sickLeaveAmount; // Use sickLeaveAmount instead of wOPayAmount
-            } else {
+                updateData.sickLeaveAmount = sickLeaveAmount; 
                 return createError(400, "Invalid sickLeaveAmount");
             }
         }
@@ -574,5 +575,49 @@ exports.updateImageProfile = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.currentUser = async(req,res,next)=>{
+    try {
+        
+        const email = req.user.email
+        const member = await prisma.user.findFirst({
+            where:{
+               email: email
+            },
+            select:{
+                id: true,
+                email: true,
+                firstName: true,
+                lastName: true,
+                role: true
+            }
+        })
+        // console.log(member)
+        res.json(member)
+    } catch (err) {
+        next(err)
+    }
+}
+
+exports.currentAdmin = async(req,res,next)=>{
+    try {
+     const email = req.user.email
+     const admin = await prisma.user.findFirst({
+         where:{
+            email: email
+         },
+         select:{
+             id: true,
+             email: true,
+             role: true
+         }
+     })
+     console.log(admin)
+     res.json(admin)
+    } catch (err) {
+     next(err)
+    }
+ }
+ 
 
 

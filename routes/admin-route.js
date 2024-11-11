@@ -17,6 +17,8 @@ const {
   getHeader,
   getLeadSupId,
   updateImageProfile,
+  currentUser,
+  currentAdmin
   
 } = require("../controllers/admin-controller");
 
@@ -39,5 +41,7 @@ router.post("/admin/create-position", createPosition)
 router.get("/admin/leader", getHeader)
 router.get("/admin/supId",authCheck,getLeadSupId)
 router.patch("/admin/update-profile",authCheck,upload.single("file"),updateImageProfile)
+router.get("/admin/current-user",authCheck,currentUser)
+router.get("/admin/current-admin",authCheck,adminCheck,currentAdmin)
 
 module.exports = router;
