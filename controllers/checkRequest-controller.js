@@ -61,6 +61,26 @@ exports.changeComment = async (req,res,next) => {
     }
 }
 
+exports.editIsHide = async (req,res,next) => {
+    try {
+        const {id} = req.params
+        const {isHide} = req.body
+        console.log(id , isHide)
+        const item = await prisma.Item.update({
+            where: {
+                id: Number(id)
+            },
+            data: {
+                isHide
+            }
+        })
+        res.status(200).json(item)
+        } 
+    catch (error) {
+        next(error)
+    }
+}
+
 exports.checkItem = async (req,res,next) => {
     try {
         const user = await prisma.Item.findMany({
