@@ -2,8 +2,6 @@ const express = require("express");
 const { registerValidator } = require("../middlewares/validator");
 const upload = require("../middlewares/upload")
 const router = express.Router();
-const upload = require("../middlewares/upload")
-const { registerValidator } = require("../middlewares/validator");
 const {
   register,
   updateUser,
