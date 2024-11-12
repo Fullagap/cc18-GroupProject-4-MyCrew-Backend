@@ -9,4 +9,5 @@ router.get("/user/leave/:userid", GetLeave)
 router.get("/user/salary/:userid", GetSalary)
 router.get("/user/leave-record/:userid", GetLeaveRecord)
 
+
 module.exports = router

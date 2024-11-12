@@ -2,9 +2,40 @@
 const createError = require("../utils/createError");
 const prisma = require("../config/prisma");
 
+module.exports.getAttendanceData = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const attendanceData = await prisma.attendance.findMany({
+      where: {
+        user: {
+          supId: id,
+        },
+      },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            profileImg: true,
+          },
+        },
+        site: {
+          select: {
+            siteName: true,
+          },
+        },
+      },
+    });
+    res.json(attendanceData);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.clockIn = async (req, res, next) => {
   try {
     const { latitude, longitude, location } = req.body;
+    const { id } = req.user;
 
     // get location to compare
 
@@ -28,10 +59,8 @@ module.exports.clockIn = async (req, res, next) => {
       officeLocation.longitude
     );
 
-    // Mock user data
-    const userId = 1; // Test user ID,actually we get it from token
     const currentDate = new Date();
-    
+
     // Check if user standing in area or not
     if (distance > officeLocation.radius) {
       return res.status(400).json({
@@ -47,7 +76,7 @@ module.exports.clockIn = async (req, res, next) => {
     // check if user already clock-in or not
     const isClockIn = await prisma.attendance.findFirst({
       where: {
-        userId: userId,
+        userId: id,
         year: currentDate.getFullYear(),
         month: currentDate.getMonth() + 1,
         date: currentDate.getDate(),
@@ -58,13 +87,13 @@ module.exports.clockIn = async (req, res, next) => {
     if (isClockIn) {
       return res.json({
         ok: false,
-        message: "You have already clocked in today"  ,
+        message: "You have already clocked in today",
       });
     }
 
     const attendance = await prisma.attendance.create({
       data: {
-        userId: userId,
+        userId: id,
         year: currentDate.getFullYear(),
         month: currentDate.getMonth() + 1,
         date: currentDate.getDate(),
@@ -76,7 +105,7 @@ module.exports.clockIn = async (req, res, next) => {
             ? true
             : false
           : false,
-        // checkInLocation: `${latitude},${longitude}` // we will record where user logged-in are we?
+        siteId: location, // we will record where user logged-in are we?
       },
     });
     res.json({
@@ -116,13 +145,12 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 module.exports.clockOut = async (req, res, next) => {
   try {
     const { latitude, longitude, location } = req.body;
-    const userId = 1; // Test user ID
+    const { id } = req.user;
     const currentDate = new Date();
-
     // Find today's attendance record
     const existingAttendance = await prisma.attendance.findFirst({
       where: {
-        userId: userId,
+        userId: id,
         year: currentDate.getFullYear(),
         month: currentDate.getMonth() + 1,
         date: currentDate.getDate(),
@@ -156,5 +184,15 @@ module.exports.clockOut = async (req, res, next) => {
   } catch (error) {
     console.error("Clock out error:", error);
     next(createError("Failed to clock out", 500));
+  }
+};
+
+module.exports.CheckIsSup = async (req, res, next) => {
+  try {
+    console.log(req.user.id)
+    const supData = await prisma.user.findFirst({ where: { supId: req.user.id } });
+    res.status(201).json(supData);
+  } catch (err) {
+    next(err);
   }
 };
