@@ -38,6 +38,16 @@ exports.getUserById = async (id) => {
     console.log(error);
   }
 };
+exports.getUsersId= async (id) => {
+  try {
+    const data = {select: { id : true } };
+    const resp = await prisma.user.findMany(data);
+    return resp;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.getSalaryByUserId = async (id) => {
   try {
     const data = { where: { id: id }, select: { salary: true } };
