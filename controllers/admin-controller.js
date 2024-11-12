@@ -24,7 +24,8 @@ exports.register = async (req, res, next) => {
             annualLeaveAmount,
             sickLeaveAmount,
             personalLeaveAmount,
-            supId
+            supId,
+            address
         } = req.body;
 
         // Validate dateStart
@@ -61,6 +62,7 @@ exports.register = async (req, res, next) => {
                 identicalNumber,
                 email,
                 phoneNumber,
+                address: address,
                 password: hashPassword,
                 departmentId: +departmentId,
                 positionId: +positionId,
@@ -132,7 +134,7 @@ exports.allEmployees = async (req, res, next) => {
             }
         })
 
-        const employeesDetail = employees.map(({ password, dateEnd, profileImg, ...userData }) => userData);
+        const employeesDetail = employees.map(({ password, dateEnd, ...userData }) => userData);
         res.json(employeesDetail)
     } catch (err) {
         next(err)
@@ -328,9 +330,10 @@ exports.getLeaderEachSupId = async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        // Step 1: Check if the provided `supId` is 1 and find the top-level leader with `supId: null`
+        // Step 1: Check if the provided `id` is "null" and find the top-level leader with `supId: null`
         let leader;
-        if (+id === 1) {
+
+        if (id === "null") {  
             leader = await prisma.user.findFirst({
                 where: {
                     supId: null, // Find the top leader
@@ -348,11 +351,29 @@ exports.getLeaderEachSupId = async (req, res, next) => {
                     },
                 },
             });
-        } else {
-            //if subId is not 1, directly find the leader with that `supId`
+        } else if (+id === 1) {  // If id is 1, find the top leader
             leader = await prisma.user.findFirst({
                 where: {
-                    id: +id,
+                    supId: null,
+                },
+                include: {
+                    position: {
+                        select: {
+                            positionName: true,
+                        },
+                    },
+                    Department: {
+                        select: {
+                            departmentName: true,
+                        },
+                    },
+                },
+            });
+        } else {
+            // Otherwise, find the leader with the provided `id`
+            leader = await prisma.user.findFirst({
+                where: {
+                    id: +id,  // Convert id to a number
                 },
                 include: {
                     position: {
@@ -374,7 +395,7 @@ exports.getLeaderEachSupId = async (req, res, next) => {
             return next(createError(400, "Leader not found"));
         }
 
-        // Step 3: Find subordinates using the leader's `id` as `supId`
+        // Step 2: Find subordinates using the leader's `id` as `supId`
         const subordinates = await prisma.user.findMany({
             where: {
                 supId: leader.id,
@@ -400,7 +421,7 @@ exports.getLeaderEachSupId = async (req, res, next) => {
             },
         });
 
-        // Step 4: Return the leader and their subordinates
+        // Step 3: Return the leader and their subordinates
         res.json({
             leader: {
                 id: leader.id,
@@ -416,6 +437,7 @@ exports.getLeaderEachSupId = async (req, res, next) => {
         next(err);
     }
 };
+
 
 
 
