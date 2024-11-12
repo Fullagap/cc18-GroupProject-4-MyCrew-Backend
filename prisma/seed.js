@@ -318,19 +318,19 @@ const itemData= [
   {
   id:1,
   itemName : "shirt",
-  const: 150,
+  cost: 150,
   categoryId :1
 },
 {
   id:2,
   itemName : "pant",
-  const: 150,
+  cost: 150,
   categoryId :1
 },
 {
   id:3,
   itemName : "shirt",
-  const: 3350,
+  cost: 3350,
   categoryId :2
 }
 ]
@@ -355,7 +355,7 @@ async function run() {
   await prisma.leaveRecord.createMany({ data: leaveRecordData });
   await prisma.attendance.createMany({ data: createAttandanceSeed() });
   await prisma.payroll.createMany({ data: payrollData });
-  await prisma.session.createMany({ data: sessionData });
+  // await prisma.session.createMany({ data: sessionData });
   await prisma.activityAttandance.createMany({ data: activityAttandanceData });
   await prisma.site.createMany({ data: siteData });
   await prisma.category.createMany({ data: categoryItem });
