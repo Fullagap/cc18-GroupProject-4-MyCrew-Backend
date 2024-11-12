@@ -105,13 +105,15 @@ model Payroll {
   paidDate           DateTime? @default(now())
   month              Int
   year               Int
-  netIncome          Decimal @map("net_income")
+  netIncome          Decimal   @map("net_income")
   income             Decimal
   salary             Decimal
   compensation       Decimal
   tax                Decimal
   socialSecurityFund Decimal   @map("social_security_fund")
   providentFund      Decimal   @map("provident_fund")
+  extra              Decimal
+  incomePerDay       Decimal   @map("income_per_day")
 
   user User @relation(fields: [userId], references: [id])
 }
@@ -122,6 +124,7 @@ model Item {
   itemName   String  @map("item_name")
   cost       Decimal
   categoryId Int     @map("category_id")
+  isHide   Boolean    @default(false) @map("is_hide")
 
   category     Category      @relation(fields: [categoryId], references: [id])
   RequestItems RequestItem[]
@@ -214,6 +217,7 @@ model LeaveRecord {
   status      Status
   description String? 
   comment     String?
+  isPaid      Boolean   @default(false)
 
   leaveCategory LeaveCategory @relation(fields: [leaveTypeId], references: [id])
   user          User          @relation(fields: [userId], references: [id])
