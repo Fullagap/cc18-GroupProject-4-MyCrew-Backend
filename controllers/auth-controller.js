@@ -15,7 +15,7 @@ exports.login = async(req,res,next)=>{
                email: email
            }
         })
-        
+        console.log('user', user)
         if(!user){
            return createError(400,"Email or password is invalid")
         }
@@ -29,7 +29,8 @@ exports.login = async(req,res,next)=>{
            user:{
                id: user.id,
                email: user.email,
-               role: user.role
+               role: user.role,
+               supId: user.supId
            }
         }
 

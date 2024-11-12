@@ -109,7 +109,7 @@ calendarController.updateSession = async (req, res, next) => {
       startedDate,
       endDate,
       description,
-      eventType,
+    //   eventType,
       attendanceLimit,
     } = req.body;
 
@@ -119,7 +119,7 @@ calendarController.updateSession = async (req, res, next) => {
       startedDate,
       endDate,
       description,
-      eventType,
+    //   eventType,
       attendanceLimit
     );
     res.json({ message: "Update Session Success" });
@@ -150,10 +150,22 @@ calendarController.getMissingAttendance = async (req, res, next) => {
 
 calendarController.publicHoliday = async (req, res, next) => {
   try {
-    const { description, date, month, year, dateTime } = req.body;
-    // console.log('req.body', req.body)
-    await calendarService.publicHoliday(description, date, month, year, dateTime);
-    res.json({ message: "get publicHoliday Success" });
+    const {description, date, month, year, dateTime} = req.body;
+    const arrData = req.body
+    await calendarService.publicHoliday(arrData);
+    res.json({ message: "get publicHoliday" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.editPublicHoliday = async (req, res, next) => {
+  try {
+    const {publicHolidayId} = req.params
+    const {description,date, month, year, dateTime} = req.body;
+    console.log('req.body', req.body)
+    await calendarService.editPublicHoliday(publicHolidayId,description,date, month, year, dateTime);
+    res.json({ message: "EditPublicHoliday" });
   } catch (err) {
     next(err);
   }

@@ -212,7 +212,7 @@ model LeaveRecord {
   leaveTypeId Int       @map("leave_type_id")
   supId       Int?      @map("sup_id")
   status      Status
-  description String?
+  description String? 
   comment     String?
 
   leaveCategory LeaveCategory @relation(fields: [leaveTypeId], references: [id])

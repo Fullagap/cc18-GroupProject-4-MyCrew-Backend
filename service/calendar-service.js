@@ -77,7 +77,7 @@ calendarService.updateSession = async (
   startedDate,
   endDate,
   description,
-  eventType,
+  // eventType,
   attendanceLimit
 ) =>
   await prisma.session.update({
@@ -89,7 +89,7 @@ calendarService.updateSession = async (
       startedDate: new Date(startedDate),
       endDate: new Date(endDate),
       description,
-      eventType,
+      // eventType,
       attendanceLimit: !isNaN(attendanceLimit)
         ? parseInt(attendanceLimit)
         : null,
@@ -116,15 +116,31 @@ calendarService.getMissingAttendance = async (userId) =>
     },
   });
 
-calendarService.publicHoliday = async (description, date, month, year, dateTime) =>
-  await prisma.publicHoliday.create({
-    data: {
-      description,
-      date: parseInt(date),
-      month: parseInt(month),
-      year: parseInt(year),
-      dateTime,
-    },
-  });
+calendarService.publicHoliday = async (arrData) => {
+  try {
+    await prisma.publicHoliday.create({
+      data: arrData,
+    });
+    console.log("Public holiday created successfully!");
+  } catch (error) {
+    console.error("Error creating public holiday:", error);
+  }
+};
+
+calendarService.editPublicHoliday = async (publicHolidayId,description,date, month, year, dateTime) => {
+  try {
+    await prisma.publicHoliday.update({
+      where: {
+        id: parseInt(publicHolidayId),
+      },
+      data: {
+        description,date, month, year, dateTime
+      },
+    });
+    console.log("Public holiday Edit successfully!");
+  } catch (error) {
+    console.error("Error Edit public holiday:", error);
+  }
+};
 
 module.exports = calendarService;

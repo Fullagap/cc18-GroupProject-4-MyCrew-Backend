@@ -1,8 +1,6 @@
 const express = require("express");
-const { registerValidator } = require("../middlewares/validator");
 const upload = require("../middlewares/upload")
 const router = express.Router();
-const upload = require("../middlewares/upload")
 const { registerValidator } = require("../middlewares/validator");
 const {
   register,
@@ -24,9 +22,6 @@ const {
 } = require("../controllers/admin-controller");
 
 const { authCheck, adminCheck } = require("../middlewares/authen");
-const { registerValidator } = require("../middlewares/validator");
-const upload = require("../middlewares/upload")
-
 
 router.patch("/admin/update-user/:id",authCheck,adminCheck,updateUser)
 router.post("/admin/register",authCheck,adminCheck,registerValidator,register)
@@ -36,7 +31,7 @@ router.get("/admin/All-employees",authCheck,adminCheck,allEmployees)
 router.get("/admin/department-position/:id",authCheck,adminCheck,getPositionEachDepartment)
 router.get("/admin/department-employees/:id",authCheck,adminCheck,getEmployeeInDepartment)
 router.get("/admin/superId-employees/:id", authCheck, adminCheck, getEachSuperId)
-router.get("/admin/leader-superId/:id", authCheck, adminCheck, getLeaderEachSupId)
+router.get("/admin/leader-superId/:id", authCheck, getLeaderEachSupId) //ลบ admin
 router.get("/admin/superId-department/:id", authCheck, adminCheck, getSupIdByDepartment)
 router.post("/admin/create-department", createDepartment)
 router.post("/admin/create-position", createPosition)
