@@ -1,0 +1,174 @@
+const calendarService = require("../service/calendar-service");
+const calendarController = {};
+
+calendarController.getCalendar = async (req, res, next) => {
+  try {
+    const data = await calendarService.getCalendar();
+    res.json({ message: "Success", data });
+  } catch (err) {
+    next();
+  }
+};
+
+calendarController.getLeaveRecord = async (req, res, next) => {
+  try {
+    const data = await calendarService.getLeaveRecord();
+    res.json({ message: "Success LeaveRecord ", data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.addLeaveRequest = async (req, res, next) => {
+  try {
+    const {
+      userId,
+      requestDate,
+      startDate,
+      endDate,
+      leaveTypeId,
+      supId,
+      status,
+      description,
+    } = req.body;
+    await calendarService.addLeaveRequest(
+      userId,
+      requestDate,
+      startDate,
+      endDate,
+      leaveTypeId,
+      supId,
+      status,
+      description
+    );
+    res.json({ message: "Success" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.getLeaveRecordById = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const data = await calendarService.getLeaveRecordById(userId);
+    res.json({ message: "Success", data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.getSession = async (req, res, next) => {
+  try {
+    const data = await calendarService.getSession();
+    res.json({ message: "Success getSession", data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.getHoliday = async (req, res, next) => {
+  try {
+    const data = await calendarService.getHoliday();
+    res.json({ message: "Success getHoliday", data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.addSession = async (req, res, next) => {
+  try {
+    const {
+      createUserId,
+      startedDate,
+      endDate,
+      description,
+      eventType,
+      attendanceLimit,
+    } = req.body;
+    
+    await calendarService.addSession(
+      createUserId,
+      startedDate,
+      endDate,
+      description,
+      eventType,
+      attendanceLimit
+    );
+    res.json({ message: "Add Session Success" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.updateSession = async (req, res, next) => {
+  try {
+    //   const createUserId = req.user?.id; // ใช้ req.user.id ถ้ามีการยืนยันตัวตน
+    const { sessionId } = req.params;
+    const {
+      createUserId,
+      startedDate,
+      endDate,
+      description,
+    //   eventType,
+      attendanceLimit,
+    } = req.body;
+
+    await calendarService.updateSession(
+      sessionId,
+      createUserId,
+      startedDate,
+      endDate,
+      description,
+    //   eventType,
+      attendanceLimit
+    );
+    res.json({ message: "Update Session Success" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.deleteSession = async (req, res, next) => {
+  try {
+    const { sessionId } = req.params;
+    await calendarService.deleteSession(sessionId);
+    res.json({ message: "Delete Session Success" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.getMissingAttendance = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const data = await calendarService.getMissingAttendance(userId);
+    res.json({ message: "get MissingAttendance Success", data });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.publicHoliday = async (req, res, next) => {
+  try {
+    const {description, date, month, year, dateTime} = req.body;
+    const arrData = req.body
+    await calendarService.publicHoliday(arrData);
+    res.json({ message: "get publicHoliday" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+calendarController.editPublicHoliday = async (req, res, next) => {
+  try {
+    const {publicHolidayId} = req.params
+    const {description,date, month, year, dateTime} = req.body;
+    console.log('req.body', req.body)
+    await calendarService.editPublicHoliday(publicHolidayId,description,date, month, year, dateTime);
+    res.json({ message: "EditPublicHoliday" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = calendarController;

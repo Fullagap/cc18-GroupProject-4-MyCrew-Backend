@@ -1,0 +1,28 @@
+const express = require("express");
+const calendarController = require("../controllers/calendar-controller");
+const router = express.Router()
+
+router.get("/calendar", calendarController.getCalendar); // แสดงข้อมูลปฏิทินทั้งหมด แค่Calendar
+router.get("/calendar/leaveRecord", calendarController.getLeaveRecord); // แสดงแค่ขาดลามาสายอย่างเดียว ไม่เกี่ยวกับปฏิทิน ค่อยเอามา Map ใส่ทีหลัง
+router.get("/calendar/leaveRecord/:userId", calendarController.getLeaveRecordById); // ดูประวัติการหยุดงาน
+
+router.get("/calendar/session",calendarController.getSession); // ดู session ทั้งหมด
+// router.get("/calendar/session/getHoliday", calendarController.getHoliday); // getHoliday ไม่น่าได้ใช้แล้ว
+
+router.post("/calendar/publicHoliday", calendarController.publicHoliday ); // ส่งของให้ publicHoliday
+router.post("/calendar/editPublicHoliday/:publicHolidayId", calendarController.editPublicHoliday ); // Edit ให้ publicHoliday
+
+router.post("/calendar/session/addSession", calendarController.addSession); // เพิ่ม memo 
+router.patch("/calendar/session/updateSession/:sessionId", calendarController.updateSession); // อัพเดท memo 
+router.delete("/calendar/deleteSession/:sessionId", calendarController.deleteSession); // ลบ memo 
+
+router.post("/calendar/leaveRequest/addLeaveRequest", calendarController.addLeaveRequest); // ขอลา
+
+router.get("/calendar/missingAttendance/:userId", calendarController.getMissingAttendance ); // หาวันขาด
+
+ 
+// router.get("/calendar/memo/:date", calendarController.getHoliday);   // ดู memo ในวันที่เลือก
+// router.post("/calendar/memo", calendarController.addHoliday);        // เพิ่ม memo 
+// router.delete("/calendar/deleteMemo/:memoId", calendarController.deleteHoliday); // ลบ memo 
+
+module.exports = router 
