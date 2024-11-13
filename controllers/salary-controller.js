@@ -9,6 +9,7 @@ const { createPayroll } = require("../repository/payroll-repo")
 exports.calculateSalary = async (req,res,next)=>{ 
     try {
         const {month,year} = req.body
+        console.log('ข้อมูลที่ได้รับใน body:', req.body);
         //Get number of workingday,WeekendDay
         const users = await getAllUserId()
         for(let i=0;i<users.length;i++)
