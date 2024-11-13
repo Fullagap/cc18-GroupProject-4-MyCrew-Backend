@@ -1,3 +1,4 @@
+const { getWorkingRecordByUserId } = require("../repository/attandance-repo")
 const { getMonthlyLeaveRecordByUserId, getPrevMonthlyLeaveRecordByUserId, updateLeaveRecordsById } = require("../repository/leaverecord-repo")
 const { getIncomePerDayByUserId } = require("../repository/payroll-repo")
 const { getPublicHolidayByMonthly } = require("../repository/publicHoliday-repo")
@@ -88,6 +89,26 @@ async function calculatePayroll (objWorkingDetail,ActualWorkingDay,userId,month,
     return payroll
 }
 
+async function getWorkingRecord(userId,month,year)
+{
+    const resp = await getWorkingRecordByUserId(Number(userId),Number(month),Number(year))
+    const record = resp.reduce((prev,curr,index)=>{
+        let duration = (curr.checkOutTime.getTime()-curr.checkInTime.getTime()) //base on millisec
+        let workingTime = 0
+        const stdWorktime = 9*60*60*1000 //9 hours perday
+        if(duration > stdWorktime)
+        {
+            workingTime = 1
+        }
+        else{
+            workingTime = Math.floor((duration/stdWorktime)*100)/100
+        }
+        prev = prev+workingTime
+        return prev
+    },0)
+    return record
+}
+
 async function getLeaveDataByMonthly(userId,month,year,optional)
 {
     // const lowerLimit = new Date(`${year}-${month}-01`)
@@ -175,4 +196,4 @@ async function getAllUserId()
     return arrUsers
 }
 
-module.exports = {getWorkingDetailByMonthly,calculatePayroll,getLeaveDataByMonthly,getAllUserId}
+module.exports = {getWorkingDetailByMonthly,calculatePayroll,getLeaveDataByMonthly,getAllUserId,getWorkingRecord}
