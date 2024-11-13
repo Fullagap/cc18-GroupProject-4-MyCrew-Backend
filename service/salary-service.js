@@ -1,3 +1,4 @@
+const { getWorkingRecordByUserId } = require("../repository/attandance-repo")
 const { getMonthlyLeaveRecordByUserId, getPrevMonthlyLeaveRecordByUserId, updateLeaveRecordsById } = require("../repository/leaverecord-repo")
 const { getIncomePerDayByUserId } = require("../repository/payroll-repo")
 const { getPublicHolidayByMonthly } = require("../repository/publicHoliday-repo")
@@ -37,19 +38,20 @@ function getWorkingDetailByMonthly(month,year)
 
 function calculateSocialSecurityFund(salary)
 {
-    const amount = salary*0.05
+    const amount = Math.round(salary*0.05*100)/100
     return amount>=750?750:amount
 }
 
 function calculateProvidentFund(amount)
 {
-    return amount*0.03
+    return (Math.round(amount*0.03*100)/100)
 }
 
 function getTax(income,providentFund,socialSecurityFund)
 {   
     let tax = 0.05
-    return ((income-providentFund-socialSecurityFund)*tax)
+    let output = Math.round((income-providentFund-socialSecurityFund)*tax*100)/100
+    return output
 }
 
 async function calculatePayroll (objWorkingDetail,ActualWorkingDay,userId,month,year)
@@ -75,17 +77,37 @@ async function calculatePayroll (objWorkingDetail,ActualWorkingDay,userId,month,
     // console.log('prevIncomePerDay', prevIncomePerDay)
 
     let payroll = {}
-    let incomePerDay = (salary/workingDay)
-    let compensation = incomePerDay*(workingDay-actualWorkingDay-leaveData.currentLeave-holidayAmount)
-    let extra = leaveData.previousLeave*prevIncomePerDay
-    let income = salary-compensation + extra
+    let incomePerDay = Math.round((salary/workingDay)*100)/100
+    let compensation = Math.round(incomePerDay*(workingDay-actualWorkingDay-leaveData.currentLeave-holidayAmount)*100)/100
+    let extra = Math.round(leaveData.previousLeave*prevIncomePerDay*100)/100
+    let income = Math.round((salary-compensation + extra)*100)/100
     //Provident fund 3%
     let providentFund = calculateProvidentFund(income)
     let socialSecurityFund = calculateSocialSecurityFund(salary)
     let tax = getTax(income,providentFund,socialSecurityFund)
-    let netIncome = income-providentFund-socialSecurityFund-tax
+    let netIncome = Math.round((income-providentFund-socialSecurityFund-tax)*100)/100
     payroll ={incomePerDay,compensation,salary,tax,socialSecurityFund,providentFund,netIncome,income,extra}
     return payroll
+}
+
+async function getWorkingRecord(userId,month,year)
+{
+    const resp = await getWorkingRecordByUserId(Number(userId),Number(month),Number(year))
+    const record = resp.reduce((prev,curr,index)=>{
+        let duration = (curr.checkOutTime.getTime()-curr.checkInTime.getTime()) //base on millisec
+        let workingTime = 0
+        const stdWorktime = 9*60*60*1000 //9 hours perday
+        if(duration > stdWorktime)
+        {
+            workingTime = 1
+        }
+        else{
+            workingTime = Math.floor((duration/stdWorktime)*100)/100
+        }
+        prev = prev+workingTime
+        return prev
+    },0)
+    return record
 }
 
 async function getLeaveDataByMonthly(userId,month,year,optional)
@@ -175,4 +197,4 @@ async function getAllUserId()
     return arrUsers
 }
 
-module.exports = {getWorkingDetailByMonthly,calculatePayroll,getLeaveDataByMonthly,getAllUserId}
+module.exports = {getWorkingDetailByMonthly,calculatePayroll,getLeaveDataByMonthly,getAllUserId,getWorkingRecord}
