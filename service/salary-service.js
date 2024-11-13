@@ -38,19 +38,20 @@ function getWorkingDetailByMonthly(month,year)
 
 function calculateSocialSecurityFund(salary)
 {
-    const amount = salary*0.05
+    const amount = Math.round(salary*0.05*100)/100
     return amount>=750?750:amount
 }
 
 function calculateProvidentFund(amount)
 {
-    return amount*0.03
+    return (Math.round(amount*0.03*100)/100)
 }
 
 function getTax(income,providentFund,socialSecurityFund)
 {   
     let tax = 0.05
-    return ((income-providentFund-socialSecurityFund)*tax)
+    let output = Math.round((income-providentFund-socialSecurityFund)*tax*100)/100
+    return output
 }
 
 async function calculatePayroll (objWorkingDetail,ActualWorkingDay,userId,month,year)
@@ -76,15 +77,15 @@ async function calculatePayroll (objWorkingDetail,ActualWorkingDay,userId,month,
     // console.log('prevIncomePerDay', prevIncomePerDay)
 
     let payroll = {}
-    let incomePerDay = (salary/workingDay)
-    let compensation = incomePerDay*(workingDay-actualWorkingDay-leaveData.currentLeave-holidayAmount)
-    let extra = leaveData.previousLeave*prevIncomePerDay
-    let income = salary-compensation + extra
+    let incomePerDay = Math.round((salary/workingDay)*100)/100
+    let compensation = Math.round(incomePerDay*(workingDay-actualWorkingDay-leaveData.currentLeave-holidayAmount)*100)/100
+    let extra = Math.round(leaveData.previousLeave*prevIncomePerDay*100)/100
+    let income = Math.round((salary-compensation + extra)*100)/100
     //Provident fund 3%
     let providentFund = calculateProvidentFund(income)
     let socialSecurityFund = calculateSocialSecurityFund(salary)
     let tax = getTax(income,providentFund,socialSecurityFund)
-    let netIncome = income-providentFund-socialSecurityFund-tax
+    let netIncome = Math.round((income-providentFund-socialSecurityFund-tax)*100)/100
     payroll ={incomePerDay,compensation,salary,tax,socialSecurityFund,providentFund,netIncome,income,extra}
     return payroll
 }
