@@ -92,10 +92,21 @@ exports.register = async (req, res, next) => {
             to: email,
             subject: 'Password for login',
             html: `
-                <p>Dear ${firstName},</p>
-                <p>Here is your email to login: ${email}.</p>
-                <p>Password: ${identicalNumber}.</p>
-                <p>MyCrew Admin</p>
+                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                        <p>Dear ${firstName},</p>
+                        <p>Welcome to MyCrew! We’re pleased to have you on board.</p>
+                        <p>Please find your login credentials below:</p>
+                        <p><strong>Email:</strong> ${email}</p>
+                        <p><strong>Password:</strong> ${identicalNumber}</p>
+                        <p style="margin-top: 20px;">For your security, we recommend changing your password upon first login.</p>
+                        <p>If you have any questions or need assistance, please don’t hesitate to reach out to our support team.</p>
+                        <p>Best regards,</p>
+                        <p><strong>The MyCrew Admin Team</strong></p>
+                        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;" />
+                        <p style="font-size: 12px; color: #777;">
+                            This email was sent automatically. Please do not reply to this message.
+                        </p>
+                    </div>
             `,
         };
 
@@ -157,6 +168,7 @@ exports.updateUser = async (req, res, next) => {
             const annualLeaveAmount = parseInt(req.body.annualLeaveAmount, 10);
             if (!isNaN(annualLeaveAmount)) {
                 updateData.annualLeaveAmount = annualLeaveAmount;
+                updateData.annualLeave = annualLeaveAmount;
             } else {
                 return createError(400, "Invalid annualLeaveAmount");
             }
@@ -164,19 +176,20 @@ exports.updateUser = async (req, res, next) => {
 
         if (req.body.sickLeaveAmount) {
             const sickLeaveAmount = parseInt(req.body.sickLeaveAmount, 10); 
-            if (!isNaN(sickLeaveAmount)) {
-                updateData.sickLeaveAmount = sickLeaveAmount; 
+            if (isNaN(sickLeaveAmount)) {
                 return createError(400, "Invalid sickLeaveAmount");
             }
+            updateData.sickLeaveAmount = sickLeaveAmount; 
+            updateData.sickLeave = sickLeaveAmount; 
         }
 
         if (req.body.personalLeaveAmount) {
             const personalLeaveAmount = parseInt(req.body.personalLeaveAmount, 10);
-            if (!isNaN(personalLeaveAmount)) {
-                updateData.personalLeaveAmount = personalLeaveAmount;
-            } else {
-                return createError(400, "Invalid WOPayAmount");
+            if (isNaN(personalLeaveAmount)) {
+                return createError(400, "Invalid personalLeaveAmount");
             }
+            updateData.personalLeaveAmount = personalLeaveAmount;
+            updateData.personalLeave = personalLeaveAmount;
         }
 
         if (req.body.supId) updateData.supId = req.body.supId;
