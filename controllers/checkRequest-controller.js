@@ -128,6 +128,22 @@ exports.checkCategory = async (req,res,next) => {
     }
 }
 
+exports.createCategory = async (req, res, next) => {
+    try {
+        const { name } = req.body;
+
+        const item = await prisma.category.create({
+            data: {
+                categoryName: name,
+            },
+        });
+
+        res.status(201).json(item); 
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.updateItem = async (req, res, next) => {
     try {
         const { name, cost, categoryId } = req.body;
