@@ -2,7 +2,7 @@ const express = require("express")
 const { calculateSalary} = require("../controllers/salary-controller")
 const router = express.Router()
 
-router.get("/salary", calculateSalary)
-// router.get("/salary/get-leaverecord",getLeaveRecord)
+router.post("/salary", calculateSalary)
+// router.get("/salary/user",getLeaveRecord)
 
 module.exports = router
