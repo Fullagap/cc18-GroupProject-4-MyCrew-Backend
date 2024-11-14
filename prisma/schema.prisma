@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -58,7 +57,8 @@ model User {
   position   Position?   @relation(fields: [positionId], references: [id])
   Department Department? @relation(fields: [departmentId], references: [id])
 
-  Sessions Session[]
+  Sessions          Session[]
+  ProjectAssignments ProjectAssignment[]
 
   @@map("user")
 }
@@ -72,7 +72,7 @@ model Attendance {
   date             Int
   day              Int
   dateTime         DateTime  @db.Date()
-  checkInTime      DateTime   
+  checkInTime      DateTime
   checkOutTime     DateTime?
   workingHour      Int?
   isWorkingDay     Boolean
@@ -124,7 +124,7 @@ model Item {
   itemName   String  @map("item_name")
   cost       Decimal
   categoryId Int     @map("category_id")
-  isHide   Boolean    @default(false) @map("is_hide")
+  isHide     Boolean @default(false) @map("is_hide")
 
   category     Category      @relation(fields: [categoryId], references: [id])
   RequestItems RequestItem[]
@@ -215,7 +215,7 @@ model LeaveRecord {
   leaveTypeId Int       @map("leave_type_id")
   supId       Int?      @map("sup_id")
   status      Status
-  description String? 
+  description String?
   comment     String?
   isPaid      Boolean   @default(false)
 
@@ -226,8 +226,26 @@ model LeaveRecord {
 // LeaveCategory model
 model LeaveCategory {
   id        Int    @id @default(autoincrement())
-  leaveName String 
-  
+  leaveName String
 
   LeaveRecords LeaveRecord[]
+}
+
+model Project {
+  id                 Int                 @id @default(autoincrement())
+  title              String
+  description        String?
+  dueDate            DateTime            @map("due_date") @db.Date()
+  completeDate       DateTime?           @map("complete_date")
+  isCompleteDate     DateTime?           @map("is_complete_date")
+  comment            String?
+  ProjectAssignments ProjectAssignment[]
+}
+
+model ProjectAssignment {
+  id        Int     @id @default(autoincrement())
+  projectId Int     @map("project_id")
+  userId    Int     @map("user_id")
+  project   Project @relation(fields: [projectId], references: [id])
+  user      User    @relation(fields: [userId], references: [id])
 }
