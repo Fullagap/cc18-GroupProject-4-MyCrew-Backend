@@ -1,4 +1,5 @@
 const prisma = require("../config/prisma")
+const { increaseUserLeaveAmount } = require("../service/user-service")
 const createError = require("../utils/createError")
 
 exports.checkRequest = async (req,res,next) => {
@@ -36,6 +37,12 @@ exports.changeStatus = async (req,res,next) => {
                 status
             }
         })
+        console.log('userXXX', user)
+        if(status ==="REJECT")
+        {   
+            console.log('userReject', user)
+            increaseUserLeaveAmount(user.userId,user.leaveTypeId,user.startDate,user.endDate)
+        }
         res.status(200).json(user)
     } catch (error) {
         next(error)
