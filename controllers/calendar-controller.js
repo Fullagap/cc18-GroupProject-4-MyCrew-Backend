@@ -1,4 +1,5 @@
 const calendarService = require("../service/calendar-service");
+const { reduceUserLeaveAmount } = require("../service/user-service");
 const calendarController = {};
 
 calendarController.getCalendar = async (req, res, next) => {
@@ -31,7 +32,8 @@ calendarController.addLeaveRequest = async (req, res, next) => {
       status,
       description,
     } = req.body;
-    await calendarService.addLeaveRequest(
+    console.log('supId', supId)
+    const resp = await calendarService.addLeaveRequest(
       userId,
       requestDate,
       startDate,
@@ -41,6 +43,8 @@ calendarController.addLeaveRequest = async (req, res, next) => {
       status,
       description
     );
+    console.log('resp', resp)
+    await reduceUserLeaveAmount(userId,leaveTypeId,startDate,endDate)
     res.json({ message: "Success" });
   } catch (err) {
     next(err);

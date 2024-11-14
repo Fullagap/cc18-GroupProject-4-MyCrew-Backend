@@ -38,6 +38,7 @@ exports.getUserById = async (id) => {
     console.log(error);
   }
 };
+
 exports.getUsersId= async (id) => {
   try {
     const data = {select: { id : true } };
@@ -57,3 +58,31 @@ exports.getSalaryByUserId = async (id) => {
     console.log(error);
   }
 };
+
+exports.getUserLeaveData = async (id) => {
+  try {
+    const data = {
+      where: { id: id },
+      select: {
+        annualLeave: true,
+        sickLeave: true,
+        personalLeave: true,
+      },
+    };
+    const resp = await prisma.user.findFirst(data);
+    return resp;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.updateUser = async (id,objData) => {
+  try {
+    const data = { where: { id: id }, data : objData };
+    const resp = await prisma.user.update(data);
+    return resp;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
