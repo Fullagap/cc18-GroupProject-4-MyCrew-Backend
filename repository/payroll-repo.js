@@ -19,3 +19,24 @@ exports.createPayroll = async(userId, month, year, objPayroll)=>{
         console.log(error)     
     }
 }
+
+exports.getAllPayrollByUserId = async(userId)=>{
+    try {
+        
+        const resp = await prisma.payroll.findMany({where:{userId}})
+        return resp
+    } catch (error) {
+        console.log(error)     
+    }
+}
+exports.getPayroll = async(userId,month,year)=>{
+    try {
+        const resp = await prisma.payroll.findFirst({
+            where : {userId,month,year},
+            include : {user : true}
+          })
+        return resp
+    } catch (error) {
+        console.log(error)     
+    }
+}
