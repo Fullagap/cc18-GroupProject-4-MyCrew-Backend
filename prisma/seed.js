@@ -59,7 +59,7 @@ const userData = [
     phoneNumber: "3333333333",
     supId: 1,
     departmentId: 2,
-    positionId: 1,
+    positionId: 3,
     role: "ADMIN",
     bookBank: "3234567890123",
     salary: 20000,
@@ -125,7 +125,7 @@ const userData = [
     phoneNumber: "6666666666",
     supId: 3,
     departmentId: 2,
-    positionId: 1,
+    positionId: 3,
     role: "USER",
     bookBank: "6234567890123",
     salary: 20000,
@@ -147,7 +147,7 @@ const userData = [
     phoneNumber: "7777777777",
     supId: 3,
     departmentId: 2,
-    positionId: 2,
+    positionId: 4,
     role: "USER",
     bookBank: "7234567890123",
     salary: 20000,
@@ -355,7 +355,7 @@ async function run() {
   await prisma.leaveRecord.createMany({ data: leaveRecordData });
   await prisma.attendance.createMany({ data: createAttandanceSeed() });
   await prisma.payroll.createMany({ data: payrollData });
-  // await prisma.session.createMany({ data: sessionData });
+  await prisma.session.createMany({ data: sessionData });
   await prisma.activityAttandance.createMany({ data: activityAttandanceData });
   await prisma.site.createMany({ data: siteData });
   await prisma.category.createMany({ data: categoryItem });

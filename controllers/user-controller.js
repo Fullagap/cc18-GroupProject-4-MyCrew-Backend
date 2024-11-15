@@ -2,6 +2,7 @@ const { getRecordByUserId } = require("../repository/leaverecord-repo");
 const { getUserById } = require("../repository/user-repo");
 const createError = require("../utils/createError");
 const prisma = require("../config/prisma");
+const { getAllPayrollByUserId, getPayroll } = require("../repository/payroll-repo");
 
 exports.GetUser = async (req, res, next) => {
   try {
@@ -50,6 +51,42 @@ exports.GetSalary = async (req, res, next) => {
     console.log(salary);
     console.log("salary amout is ", salary);
     res.status(200).json({ salary });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getLastPayroll = async (req, res, next) => {
+  try {
+    const { userid } = req.params;
+    const {month,year} = req.body
+    console.log("xxxxxxxxxxxxxxxxxxxxxxx")
+    console.log('month, year', month, year)
+    const rec = await getPayroll(Number(userid),Number(month),Number(year));
+    console.log(rec);
+    
+    if (!rec) {
+      createError(500, "record is invalid");
+    }
+    
+    res.status(200).json(rec);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.GetAllPayRecByUser = async (req, res, next) => {
+  try {
+    const { userid } = req.params;
+    console.log(userid);
+    const rec = await getAllPayrollByUserId(Number(userid));
+    if (!rec) {
+      createError(500, "record is invalid");
+    }
+    
+    console.log(rec);
+    
+    res.status(200).json(rec);
   } catch (error) {
     next(error);
   }

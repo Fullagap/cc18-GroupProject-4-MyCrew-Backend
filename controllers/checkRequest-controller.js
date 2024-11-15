@@ -1,4 +1,5 @@
 const prisma = require("../config/prisma")
+const { increaseUserLeaveAmount } = require("../service/user-service")
 const createError = require("../utils/createError")
 
 exports.checkRequest = async (req,res,next) => {
@@ -36,6 +37,12 @@ exports.changeStatus = async (req,res,next) => {
                 status
             }
         })
+        console.log('userXXX', user)
+        if(status ==="REJECT")
+        {   
+            console.log('userReject', user)
+            increaseUserLeaveAmount(user.userId,user.leaveTypeId,user.startDate,user.endDate)
+        }
         res.status(200).json(user)
     } catch (error) {
         next(error)
@@ -127,6 +134,22 @@ exports.checkCategory = async (req,res,next) => {
         next(error)
     }
 }
+
+exports.createCategory = async (req, res, next) => {
+    try {
+        const { name } = req.body;
+
+        const item = await prisma.category.create({
+            data: {
+                categoryName: name,
+            },
+        });
+
+        res.status(201).json(item); 
+    } catch (error) {
+        next(error);
+    }
+};
 
 exports.updateItem = async (req, res, next) => {
     try {
