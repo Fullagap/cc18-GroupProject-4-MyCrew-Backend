@@ -421,6 +421,7 @@ exports.getLeaderEachSupId = async (req, res, next) => {
                 firstName: true,
                 lastName: true,
                 email: true,
+                supId: true,
                 position: {
                     select: {
                         positionName: true,

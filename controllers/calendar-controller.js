@@ -32,8 +32,8 @@ calendarController.addLeaveRequest = async (req, res, next) => {
       status,
       description,
     } = req.body;
-    console.log('supId', supId)
-    const resp = await calendarService.addLeaveRequest(
+    console.log('req.body', req.body)
+    await calendarService.addLeaveRequest(
       userId,
       requestDate,
       startDate,
